@@ -1,7 +1,7 @@
 const mysql = require("mysql2")
-const conn = mysql.createPool(
-    {host:"playpal.cgufr2o7hllp.us-east-2.rds.amazonaws.com",
-     database:"Booking",
+const conn = mysql.createConnection(
+    {host:"playpal.cnv2o0hbq0pm.us-east-2.rds.amazonaws.com",
+     database:"PlayPal",
      user:'admin',
      password:"dodgeram",
      port:3306,
@@ -17,3 +17,5 @@ conn.connect((err)=>{
     console.log("Connected")
  
 })
+
+module.exports = conn.promise()

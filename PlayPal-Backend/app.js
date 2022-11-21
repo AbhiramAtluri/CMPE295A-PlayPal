@@ -4,7 +4,8 @@ var cors = require('cors');
 var bodyParser = require('body-parser')
 var os = require('os');
 const mysql = require("mysql2")
-// const util = require("./src/util")
+
+const authRouter = require("./Routes/AuthRoutes")
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -13,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var server = app.listen(8080,function(){
     console.log("Server listening on" + 8080)
 })
+app.use("/auth",authRouter)
 app.get('/', function (req, res) {
     res.send('Welcome to PlayPal Backend ');
 });

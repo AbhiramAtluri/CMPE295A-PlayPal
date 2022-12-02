@@ -1,0 +1,27 @@
+.main{
+    height: 100%;
+    display: flex;
+    /* flex-direction: row; */
+    flex:1;
+    /* background-color: aliceblue; */
+    border: black;
+    border-width: medium;
+    border-style: solid;
+    align-items: stretch;
+    height: 100%;
+}
+.left{
+    display: flex;
+    flex: 1;
+    background-color:#7289DA;
+    flex-grow: 1;
+    height: 100%;
+}
+.right{
+    flex:3;
+    border: black;
+    border-width: medium;
+    border-style: solid;
+    flex-grow: 1;
+    height: 100%;
+}

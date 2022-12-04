@@ -94,7 +94,9 @@ export default function Registration() {
               }}
             >
               {activeStep === 0 ? (
-                <PersonaDetailsForm></PersonaDetailsForm>
+                <PersonaDetailsForm
+                  handleNext={handleNext}
+                ></PersonaDetailsForm>
               ) : (
                 ""
               )}
@@ -109,14 +111,15 @@ export default function Registration() {
                 }}
               >
                 {activeStep === 0 ? (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{ width: "30%" }}
-                    onClick={handleNext}
-                  >
-                    Next
-                  </Button>
+                  // <Button
+                  //   variant="contained"
+                  //   color="primary"
+                  //   style={{ width: "30%" }}
+                  //   onClick={handleNext}
+                  // >
+                  //   Next
+                  // </Button>
+                  ""
                 ) : (
                   <React.Fragment>
                     <Button

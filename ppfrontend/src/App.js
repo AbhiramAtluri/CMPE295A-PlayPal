@@ -4,7 +4,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Home";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Userfeed from "./Userfeed";
-import NavBar from "./NavBar"
+import NavBar from "./NavBar";
+import UserLogin from "./UserLogin";
 export const themeOptions = createTheme({
   palette: {
     type: "light",
@@ -80,7 +81,10 @@ function App() {
           <Route path="/Home" element={<Home />} />
         </Routes>
         <Routes>
-          <Route path="/Feed" element={<Userfeed/>}></Route>
+          <Route path="/Feed" element={<Userfeed />}></Route>
+        </Routes>
+        <Routes>
+          <Route path="/UserLogin" element={<UserLogin />}></Route>
         </Routes>
         {/* <Routes>
           <Route path = "navbar" element = {<NavBar/>}></Route>

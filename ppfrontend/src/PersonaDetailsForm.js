@@ -7,6 +7,10 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setPersonalDetials } from "./reduxSlices/PersonalDetailsSlice";
+import { Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 const validationSchema = yup.object({
   firstName: yup.string("Enter First name").required("First Name is Required"),
   lastName: yup.string("Enter Last name").required("Last Name is Required"),
@@ -25,9 +29,11 @@ const validationSchema = yup.object({
     .string("Enter your password")
     .min(8, "Password should be of minimum 8 characters length")
     .required("Password is required"),
+  dob: yup.date("Select DOB").required("DOB is required"),
 });
 export default function PersonaDetailsForm(props) {
   const formIntialValues = useSelector((state) => state.personalDetails);
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       firstName: formIntialValues.firstName,
@@ -45,6 +51,7 @@ export default function PersonaDetailsForm(props) {
     onSubmit: (values) => {
       console.log("inside submit");
       alert(JSON.stringify(values, null, 2));
+      dispatch(setPersonalDetials(values));
       props.handleNext();
     },
   });
@@ -146,12 +153,20 @@ export default function PersonaDetailsForm(props) {
             helperText={formik.touched.mobile && formik.errors.mobile}
           />
           <DesktopDatePicker
-            id="dob"
-            label="Date Of Birth"
+            // onChange={formik.handleChange}
+            onChange={(value) => formik.setFieldValue("dob", value, true)}
+            value={formik.values.dob}
             renderInput={(params) => (
-              <TextField {...params} style={{ padding: 10, width: "50%" }} />
+              <TextField
+                {...params}
+                style={{ padding: 10, width: "50%" }}
+                error={formik.touched.dob && Boolean(formik.errors.dob)}
+                helperText={formik.touched.dob && formik.errors.dob}
+                name="dob"
+                id="dob"
+                label="Date Of Birth"
+              />
             )}
-            name="dob"
           />
         </div>
         <div
@@ -214,6 +229,19 @@ export default function PersonaDetailsForm(props) {
           >
             Next
           </Button>
+        </div>
+        <div
+          style={{
+            // margin: "2%",
+            display: "flex",
+            flex: 1,
+            justifyContent: "center",
+          }}
+        >
+          <Typography variant="p" style={{ paddingRight: "0.5%" }}>
+            Already a Member?{" "}
+          </Typography>
+          <Link to={"/UserLogin"}> Sign In,here!</Link>
         </div>
       </form>
     </div>

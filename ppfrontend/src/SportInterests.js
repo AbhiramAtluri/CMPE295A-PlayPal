@@ -15,7 +15,7 @@ export default function SportInterests() {
         img: "./images/AmericanFootball.jpeg",
       },
       {
-        sport: "BaseBall",
+        sport: "BaseBall",  
         img: "./images/baseball.jpeg",
       },
       {

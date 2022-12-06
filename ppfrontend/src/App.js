@@ -3,7 +3,8 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Home";
 import { createTheme, ThemeProvider } from "@mui/material";
-
+import Userfeed from "./Userfeed";
+import NavBar from "./NavBar"
 export const themeOptions = createTheme({
   palette: {
     type: "light",
@@ -78,6 +79,12 @@ function App() {
         <Routes>
           <Route path="/Home" element={<Home />} />
         </Routes>
+        <Routes>
+          <Route path="/Feed" element={<Userfeed/>}></Route>
+        </Routes>
+        {/* <Routes>
+          <Route path = "navbar" element = {<NavBar/>}></Route>
+        </Routes> */}
       </ThemeProvider>
     </BrowserRouter>
   );

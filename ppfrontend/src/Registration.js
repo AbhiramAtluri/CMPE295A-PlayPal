@@ -11,12 +11,15 @@ import Box from "@mui/material/Box";
 import StepButton from "@mui/material/StepButton";
 import PersonaDetailsForm from "./PersonaDetailsForm";
 import SportInterests from "./SportInterests";
+import { useSelector } from "react-redux";
 
 const steps = ["Personal Details", "Sport Interests"];
 
 export default function Registration() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
+  const personalDetails = useSelector((state) => state.personalDetails);
+  const sportInterests = useSelector((state) => state.sportInterests);
 
   const totalSteps = () => {
     return steps.length;
@@ -62,6 +65,18 @@ export default function Registration() {
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
+  };
+  const handleRegister = () => {
+    let sports = Object.keys(sportInterests).filter((key) => {
+      return sportInterests[key];
+    });
+
+    let data = {
+      ...personalDetails,
+      sports,
+    };
+    console.log(data);
+    //ToDO Call API
   };
 
   return (
@@ -134,7 +149,7 @@ export default function Registration() {
                       variant="contained"
                       color="primary"
                       style={{ width: "30%" }}
-                      onClick={handleNext}
+                      onClick={handleRegister}
                     >
                       Register
                     </Button>

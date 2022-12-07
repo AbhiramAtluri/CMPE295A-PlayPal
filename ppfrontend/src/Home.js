@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="main">
       <div className="left">
-        <img src={image} className="logo"></img>
+        <img src={"./images/logo.png"} className="logo"></img>
         <img src={coverImg} className="coverImg"></img>
         <div>
           <Typography variant="h6" className="byline">

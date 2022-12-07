@@ -7,7 +7,7 @@ const initialState = {
   pass: "",
   uname: "",
   mobile: "",
-  dob: "",
+  dob: new Date(),
   city: "",
   state: "",
   zipcode: "",

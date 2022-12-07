@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import NavBar from "./NavBar"
 import { defaultBootStyle } from './Styles'
 import Post from "./Post"
+import Createpost from './Createpost'
 import axios from 'axios'
 // import { test } from "./testdata"
 export default class Userfeed extends Component {
@@ -10,12 +11,7 @@ export default class Userfeed extends Component {
     super(props)
     this.state={
       location:"San Jose",
-      posts:[
-        {postid:"1",location:"Banglore",postedbyid:"1",timestamp:"12:45:2021",posttext:"afdkafkasndkjasndlasndlasndlkasndlkansdlknasldnsalkndlasnd",mediaurl:"dsasdad",postedname:"Gajjala",posttype:"Badminton"},
-        {postid:"1",location:"Banglore",postedbyid:"1",timestamp:"12:45:2021",posttext:"afdkafkasndkjasndlasndlasndlkasndlkansdlknasldnsalkndlasnd",mediaurl:"dsasdad",postedname:"Bokka",posttype:"Baseball"},
-        {postid:"1",location:"Banglore",postedbyid:"1",timestamp:"12:45:2021",posttext:"afdkafkasndkjasndlasndlasndlkasndlkansdlknasldnsalkndlasnd",mediaurl:"dsasdad",postedname:"qwery",posttype:"Cricket"},
-        {postid:"1",location:"Banglore",postedbyid:"1",timestamp:"12:45:2021",posttext:"Hey looking for folks to play a game of soccerr this weekend, Booked a location at San Jose Football center",mediaurl:"dsasdad",postedname:"sssaasasas",posttype:"Soccer"}
-      ]
+      posts:[]
   }}
     
   componentDidMount(){
@@ -34,6 +30,15 @@ export default class Userfeed extends Component {
           <NavBar />
         </div>
         <div className='container-fluid' style={{...defaultBootStyle,"marginTop":"40px"}}>
+          <div className='row'  style={defaultBootStyle}>
+          <div className='col-md-3 '>
+          </div>
+          <div className='col-md-6 d-flex justify-content-center'>
+          <Createpost></Createpost>
+          </div>
+          </div>
+          <div className='col-md-3 ' style={{"marginBottom":"30px"}}>
+          </div>
           {this.state.posts?.map((item, key) => {
             return <div className='row' style={defaultBootStyle}>
               <div className='col-md-3 '>

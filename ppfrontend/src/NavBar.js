@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import image from "./logo.png";
-
+import Sidebar from "./Sidebar"
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -41,11 +41,12 @@ export default function NavBar() {
 
 
   return (
-    <AppBar position="static">
-    <Container maxWidth="xl"  style={{"marginLeft":"None"}}>
-      <Toolbar disableGutters>
+    <AppBar position="static" style={{"marginLeft":"None","padding":"None"}}>
+    <Container maxWidth="xl"  style={{"marginLeft":"None","padding":"None"}}>
+      <Toolbar disableGutters style={{"marginLeft":"None","padding":"None"}}>
         {/* <div className="row"style={{ "margin": "0px", "padding": "0px" }} > */}
           {/* <div className="col-md-3"> */}
+          <Sidebar style={{"marginLeft":"None","padding":"None"}}></Sidebar>
           <img src= {image}style={{"height":"50px"}} ></img>
           {/* </div>
           <div className='col-md-10'>

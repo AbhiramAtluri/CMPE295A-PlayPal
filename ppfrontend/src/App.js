@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Home";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Userfeed from "./Userfeed";
-import NavBar from "./NavBar"
+import Sidebar from "./Sidebar"
 export const themeOptions = createTheme({
   palette: {
     type: "light",
@@ -82,9 +82,9 @@ function App() {
         <Routes>
           <Route path="/Feed" element={<Userfeed/>}></Route>
         </Routes>
-        {/* <Routes>
-          <Route path = "navbar" element = {<NavBar/>}></Route>
-        </Routes> */}
+        <Routes>
+          <Route path = "/sidebar" element = {<Sidebar/>}></Route>
+        </Routes>
       </ThemeProvider>
     </BrowserRouter>
   );

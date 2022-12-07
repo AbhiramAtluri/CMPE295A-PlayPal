@@ -12,8 +12,8 @@ import { setPersonalDetials } from "./reduxSlices/PersonalDetailsSlice";
 import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 const validationSchema = yup.object({
-  firstName: yup.string("Enter First name").required("First Name is Required"),
-  lastName: yup.string("Enter Last name").required("Last Name is Required"),
+  firstname: yup.string("Enter First name").required("First Name is Required"),
+  lastname: yup.string("Enter Last name").required("Last Name is Required"),
   uname: yup.string("Enter User name").required("User Name is Required"),
   mobile: yup
     .string("Enter mobile number")
@@ -25,7 +25,7 @@ const validationSchema = yup.object({
     .string("Enter your email")
     .email("Enter a valid email")
     .required("Email is required"),
-  pass: yup
+  password: yup
     .string("Enter your password")
     .min(8, "Password should be of minimum 8 characters length")
     .required("Password is required"),
@@ -36,10 +36,10 @@ export default function PersonaDetailsForm(props) {
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
-      firstName: formIntialValues.firstName,
-      lastName: formIntialValues.lastName,
+      firstname: formIntialValues.firstname,
+      lastname: formIntialValues.lastname,
       email: formIntialValues.email,
-      pass: formIntialValues.pass,
+      password: formIntialValues.password,
       uname: formIntialValues.uname,
       mobile: formIntialValues.mobile,
       dob: formIntialValues.dob,
@@ -50,7 +50,7 @@ export default function PersonaDetailsForm(props) {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log("inside submit");
-      alert(JSON.stringify(values, null, 2));
+      // alert(JSON.stringify(values, null, 2));
       dispatch(setPersonalDetials(values));
       props.handleNext();
     },
@@ -71,22 +71,22 @@ export default function PersonaDetailsForm(props) {
             label="First Name"
             variant="outlined"
             style={{ padding: 10, width: "50%" }}
-            name="firstName"
-            value={formik.values.firstName}
+            name="firstname"
+            value={formik.values.firstname}
             onChange={formik.handleChange}
-            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-            helperText={formik.touched.firstName && formik.errors.firstName}
+            error={formik.touched.firstname && Boolean(formik.errors.firstname)}
+            helperText={formik.touched.firstname && formik.errors.firstname}
           />
           <TextField
             id="lname"
             label="Last Name"
             variant="outlined"
             style={{ padding: 10, width: "50%" }}
-            name="lastName"
-            value={formik.values.lastName}
+            name="lastname"
+            value={formik.values.lastname}
             onChange={formik.handleChange}
-            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-            helperText={formik.touched.lastName && formik.errors.lastName}
+            error={formik.touched.lastname && Boolean(formik.errors.lastname)}
+            helperText={formik.touched.lastname && formik.errors.lastname}
           />
         </div>
         <div
@@ -110,16 +110,16 @@ export default function PersonaDetailsForm(props) {
             helperText={formik.touched.email && formik.errors.email}
           />
           <TextField
-            id="pass"
+            id="password"
             label="Password"
             type="password"
             variant="outlined"
             style={{ padding: 10, width: "50%" }}
-            name="pass"
-            value={formik.values.pass}
+            name="password"
+            value={formik.values.password}
             onChange={formik.handleChange}
-            error={formik.touched.pass && Boolean(formik.errors.pass)}
-            helperText={formik.touched.pass && formik.errors.pass}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
           />
         </div>
         <div

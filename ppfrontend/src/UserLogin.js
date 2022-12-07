@@ -4,28 +4,42 @@ import { Button, TextField, Typography } from "@mui/material";
 import image from "./logo.png";
 import coverImg from "./cover_image_sports.jpg";
 import { useFormik } from "formik";
-import { Link } from "react-router-dom";
+import { Link , Navigate} from "react-router-dom";
 import * as yup from "yup";
+import axios from "axios";
+
+
 const validationSchema = yup.object({
   email: yup
     .string("Enter your email")
     .email("Enter a valid email")
     .required("Email is required"),
-  pass: yup
+  password: yup
     .string("Enter your password")
     .min(8, "Password should be of minimum 8 characters length")
     .required("Password is required"),
 });
 export default function UserLogin() {
+  const [redirectFeed,setredirectFeed] = React.useState(false)
   const formik = useFormik({
     initialValues: {
       email: "",
-      pass: "",
+      password: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log("inside submit");
-      alert(JSON.stringify(values, null, 2));
+      axios.post("http://localhost:8080/auth/user/login",{...values}).then((res)=>{
+        if(res.status == 401){
+          alert("Wrong Password")
+        }else{
+          console.log("Success")
+          setredirectFeed(true)
+        }
+      }).catch((err)=>{
+        alert("Wrong Password")
+      })
+      // alert(JSON.stringify(values, null, 2));
     },
   });
   return (
@@ -87,14 +101,14 @@ export default function UserLogin() {
               helperText={formik.touched.email && formik.errors.email}
             ></TextField>
             <TextField
-              name="pass"
+              name="password"
               type="password"
               label="Password"
               style={{ width: "100%", margin: "2%" }}
-              value={formik.values.pass}
+              value={formik.values.password}
               onChange={formik.handleChange}
-              error={formik.touched.pass && Boolean(formik.errors.pass)}
-              helperText={formik.touched.pass && formik.errors.pass}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
             ></TextField>
             <Button type="submit" style={{ margin: "2%", width: "100%" }}>
               Login
@@ -115,6 +129,7 @@ export default function UserLogin() {
           </form>
         </div>
       </div>
+      {redirectFeed ==true?<Navigate to={{pathname:"/Feed"}}></Navigate>:""}
     </div>
   );
 }

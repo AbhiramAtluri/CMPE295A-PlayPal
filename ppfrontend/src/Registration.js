@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-
+import { Link, Navigate } from 'react-router-dom';
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
 import { Stepper, Step, StepLabel } from "@mui/material";
@@ -12,12 +12,14 @@ import StepButton from "@mui/material/StepButton";
 import PersonaDetailsForm from "./PersonaDetailsForm";
 import SportInterests from "./SportInterests";
 import { useSelector } from "react-redux";
-
+import axios from 'axios'
 const steps = ["Personal Details", "Sport Interests"];
 
 export default function Registration() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
+  const [redirectLogin,setredirectLogin] = React.useState(false)
+
   const personalDetails = useSelector((state) => state.personalDetails);
   const sportInterests = useSelector((state) => state.sportInterests);
 
@@ -74,9 +76,21 @@ export default function Registration() {
     let data = {
       ...personalDetails,
       sports,
+      type:"user"
     };
     console.log(data);
     //ToDO Call API
+    axios.post("http://localhost:8080/auth/user/registeration",{
+     ...data
+    }).then((res)=>{
+      console.log(res)
+      if(res.status == 403)
+      {
+        alert("User already exists")
+      }else{
+        setredirectLogin(true)
+      }
+    })      
   };
 
   return (
@@ -160,6 +174,7 @@ export default function Registration() {
           )}
         </div>
       </LocalizationProvider>
+    {redirectLogin == true?<Navigate to={{pathname:"/UserLogin"}}></Navigate>:""}
     </Box>
   );
 }

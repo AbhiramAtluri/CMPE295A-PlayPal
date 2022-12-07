@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  firstName: "",
-  lastName: "",
+  firstname: "",
+  lastname: "",
   email: "",
-  pass: "",
+  password: "",
   uname: "",
   mobile: "",
   dob: new Date(),
@@ -18,10 +18,10 @@ export const personalDetailsSlice = createSlice({
   initialState,
   reducers: {
     setPersonalDetials: (state, action) => {
-      state.firstName = action.payload.firstName;
-      state.lastName = action.payload.lastName;
+      state.firstname = action.payload.firstname;
+      state.lastname = action.payload.lastname;
       state.email = action.payload.email;
-      state.pass = action.payload.pass;
+      state.password = action.payload.password;
       state.uname = action.payload.uname;
       state.mobile = action.payload.mobile;
       state.dob = action.payload.dob;

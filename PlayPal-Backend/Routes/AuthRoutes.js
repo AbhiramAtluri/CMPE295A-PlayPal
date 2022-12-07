@@ -5,9 +5,9 @@ var queries = require("../DataBase/queries.js")
 // const bcrypt = require("bcrypt.js")
 
 router.post('/user/registeration', async (req,res)=>{
-
+        console.log(req.body)
      let {firstname,lastname,mobile,email,password,city,type} = req.body
-
+     console.log(firstname,lastname,mobile,email,password,city,type)
      try{
         let usercheck = await pool.query(queries.checkuser,[email])     
          if (usercheck[0].length >0){
@@ -23,8 +23,9 @@ router.post('/user/registeration', async (req,res)=>{
 )
 
 router.post('/user/login',async (req,res)=>{
+    console.log(req.body)
     let {email,password} = req.body
-
+    
     try{
         let authuser = await pool.query(queries.authuser,[email,password])
         if (authuser[0].length >0){

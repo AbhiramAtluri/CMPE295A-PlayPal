@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import Userfeed from "./Userfeed";
 import NavBar from "./NavBar";
 import UserLogin from "./UserLogin";
+import AdminHome from "./Admin/AdminHome";
 export const themeOptions = createTheme({
   palette: {
     type: "light",
@@ -85,6 +86,9 @@ function App() {
         </Routes>
         <Routes>
           <Route path="/UserLogin" element={<UserLogin />}></Route>
+        </Routes>
+        <Routes>
+          <Route path="/Admin/Home" element={<AdminHome />}></Route>
         </Routes>
         {/* <Routes>
           <Route path = "navbar" element = {<NavBar/>}></Route>

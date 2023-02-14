@@ -23,6 +23,9 @@ import DialogActions from '@mui/material/DialogActions';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import SportsCardItem from "./SportsCardItem";
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -79,7 +82,7 @@ export default function Createpost(props) {
     
 
     return (
-      <Card sx={{ maxWidth: 500, minWidth : 500 }}>
+      <Card sx={{ maxWidth: 500, minWidth : 500,}}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -104,24 +107,34 @@ export default function Createpost(props) {
           Create A Post
         </BootstrapDialogTitle>
         <DialogContent dividers >
-          {/* <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-            consectetur ac, vestibulum at eros.
-          </Typography>
-          <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-          </Typography>
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-            magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-            ullamcorper nulla non metus auctor fringilla.
-          </Typography> */}
+          <div className='container'>
+            <div className='row'>
+            <div className='col-md-4'>
+            <SportsCardItem data = {{sport: "Badminton",
+        img: "./images/Badminton.png",}}></SportsCardItem>
+            </div>
+            <div className='col-md-4'>
+            <SportsCardItem data = {{            sport: "Tennis",
+        img: "./images/Tennis.jpeg",}}></SportsCardItem>
+            </div>
+            <div className='col-md-4'>
+            <SportsCardItem data = {{             sport: "Cricket",
+        img: "./images/cricket.webp",}}></SportsCardItem>
+            </div>
+            </div>
+          </div>
+ 
+        {/* <TextField
+          id="outlined-multiline-static"
+          label="Multiline"
+          multiline
+          rows={8}
+          defaultValue="Default Value"
+        /> */}
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
-            Save changes
+            Post
           </Button>
         </DialogActions>
       </BootstrapDialog>

@@ -6,14 +6,16 @@ var queries = require("../DataBase/queries.js")
 
 router.post('/user/registeration', async (req,res)=>{
         console.log(req.body)
-     let {firstname,lastname,mobile,email,password,city,type} = req.body
-     console.log(firstname,lastname,mobile,email,password,city,type)
+     let {firstname,lastname,mobile,email,password,city,type,username,sports} = req.body
+     let [interest1,interest2,interest3] = [...sports]
+     console.log("hi"+firstname,lastname,mobile,email,password,city,type,username,sports)
+     console.log(interest1,interest2,interest3)
      try{
         let usercheck = await pool.query(queries.checkuser,[email])     
          if (usercheck[0].length >0){
             res.status(403).send("User Exists")
          }else{
-            let result = await pool.query(queries.addNewUser,[firstname,lastname,mobile,email,password,city,type])
+            let result = await pool.query(queries.addNewUser,[firstname,lastname,mobile,email,password,city,type,interest1,interest2,interest3])
             res.status(200).send("Success")
          }
      }
@@ -33,7 +35,7 @@ router.post('/user/login',async (req,res)=>{
         }else{
             res.status(401).send("Unauthorized User")
         }
-
+        
     }catch(err){
       console.log(err)
     }

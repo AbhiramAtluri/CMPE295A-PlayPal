@@ -1,34 +1,43 @@
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import AdminNavBar from "./AdminNavBar";
+import AdminVerficationDialog from "./AdminVerficationDialog";
 
 export default function AdminHome() {
+  const [openDialog, setopenDialog] = useState(false);
+  const [id, setid] = useState("");
+  const [type, settype] = useState("");
   const rows = [
-    { id: 1, name: "Snow", type: "Coach", date: 35 },
-    { id: 2, name: "Lannister", type: "Coach", date: 42 },
-    { id: 3, name: "Lannister", type: "Coach", date: 45 },
-    { id: 4, name: "Stark", type: "Coach", date: 16 },
-    { id: 5, name: "Targaryen", type: "Coach", date: null },
-    { id: 6, name: "Melisandre", type: "Coach", date: 150 },
-    { id: 7, name: "Clifford", type: "Coach", date: 44 },
-    { id: 8, name: "Frances", type: "Coach", date: 36 },
-    { id: 9, name: "Roxie", type: "Coach", date: 65 },
+    { id: 1, name: "Snow", type: "Coach", date: "11/05/2022" },
+    { id: 2, name: "Lannister", type: "Coach", date: "11/05/2022" },
+    { id: 3, name: "Lords Cricket Stadium", type: "Venue", date: "11/05/2022" },
+    { id: 4, name: "Stark", type: "Coach", date: "11/05/2022" },
+    {
+      id: 5,
+      name: "Targaryen football Stadium",
+      type: "Venue",
+      date: "10/24/2022",
+    },
+    { id: 6, name: "Melisandre", type: "Coach", date: "11/05/2022" },
+    { id: 7, name: "Clifford", type: "Coach", date: "11/05/2022" },
+    { id: 8, name: "Frances", type: "Coach", date: "11/05/2022" },
+    { id: 9, name: "Roxie", type: "Coach", date: "11/05/2022" },
   ];
   const columns = [
     { field: "id", headerName: "ID", width: 70, filterable: false },
     {
       field: "name",
       headerName: "Name",
-      width: 130,
+      width: 300,
       filterable: false,
     },
     {
       field: "date",
       type: "date",
-      headerName: "Date",
-      width: 130,
+      headerName: "Verification Request Date",
+      width: 200,
     },
     {
       field: "type",
@@ -36,10 +45,16 @@ export default function AdminHome() {
       width: 130,
     },
     {
-      headerName: "Actions",
+      headerName: "Remarks",
       width: 130,
     },
   ];
+  const handleRowClick = (e) => {
+    console.log(e);
+    setopenDialog(true);
+    setid(e.row.id);
+    settype(e.row.type);
+  };
   return (
     <div>
       <div>
@@ -69,9 +84,16 @@ export default function AdminHome() {
             columns={columns}
             pageSize={5}
             rowsPerPageOptions={[5]}
-            filterMode="client"
+            // filterMode="client"
+            onRowClick={(e) => handleRowClick(e)}
           />
         </div>
+        <AdminVerficationDialog
+          openDialog={openDialog}
+          closeDialog={() => setopenDialog(false)}
+          id={id}
+          type={type}
+        ></AdminVerficationDialog>
       </div>
     </div>
   );

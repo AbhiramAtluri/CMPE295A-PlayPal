@@ -35,7 +35,7 @@ export default function ButtonAppBar() {
               Tournament
             </Typography>
           </Box>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit">Logout</Button>
         </Toolbar>
       </AppBar>
     </Box>

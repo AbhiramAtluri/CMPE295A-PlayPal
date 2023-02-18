@@ -1,4 +1,4 @@
-import { IconButton, Typography } from "@mui/material";
+import { IconButton, Slide, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -13,6 +13,8 @@ export default function VenueDetails() {
   const [index, setindex] = useState(0);
   const [next, setnext] = useState(false);
   const [previous, setprevious] = useState(false);
+  const [slideIn, setSlideIn] = useState(true);
+  const [slideDirection, setSlideDirection] = useState("down");
   useEffect(() => {
     console.log(index);
   }, [index]);
@@ -22,18 +24,30 @@ export default function VenueDetails() {
   }, [imageList]);
 
   const handleNext = () => {
+    setSlideIn(false);
     if (index < imageList.length - 1) {
-      setindex(index + 1);
-      setprevious(true);
+      setTimeout(() => {
+        setindex(index + 1);
+        setprevious(true);
+        setSlideDirection("left");
+        setSlideIn(true);
+      }, 500);
     } else {
+      setSlideIn(true);
       setnext(false);
     }
   };
   const handlePrev = () => {
+    setSlideIn(false);
     if (index > 0) {
-      setnext(true);
-      setindex(index - 1);
+      setTimeout(() => {
+        setnext(true);
+        setindex(index - 1);
+        setSlideDirection("right");
+        setSlideIn(true);
+      }, 500);
     } else {
+      setSlideIn(true);
       setprevious(false);
     }
   };
@@ -46,15 +60,19 @@ export default function VenueDetails() {
             sx={{ color: "red" }}
           ></KeyboardArrowLeftIcon>
         </IconButton>
-        <Box
-          component="img"
-          sx={{
-            height: 350,
-            width: 450,
-          }}
-          alt="The house from the offer."
-          src={imageList[index]}
-        />
+        <Slide direction={slideDirection} in={slideIn}>
+          <div>
+            <Box
+              component="img"
+              sx={{
+                height: 350,
+                width: 450,
+              }}
+              alt="The house from the offer."
+              src={imageList[index]}
+            />
+          </div>
+        </Slide>
         <IconButton onClick={handleNext} disabled={!next}>
           <KeyboardArrowRightIcon
             fontSize="large"

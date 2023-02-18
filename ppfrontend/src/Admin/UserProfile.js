@@ -42,23 +42,25 @@ export default function UserProfile() {
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>City</label>
-            <Typography sx={{ paddingLeft: "3%" }}>San Jose</Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>Seattle</Typography>
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>State</label>
-            <Typography sx={{ paddingLeft: "3%" }}>Washington DC</Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>Washington</Typography>
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>Date of Birth</label>
-            <Typography sx={{ paddingLeft: "3%" }}>Washington DC</Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>02/19/1997</Typography>
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>Interests</label>
-            <Typography sx={{ paddingLeft: "3%" }}>Washington DC</Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>
+              Badminton,Cricket,American Football
+            </Typography>
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>Date Registered</label>
-            <Typography sx={{ paddingLeft: "3%" }}>Washington DC</Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>10/12/2022</Typography>
           </div>
         </div>
       </div>

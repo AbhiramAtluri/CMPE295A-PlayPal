@@ -31,7 +31,9 @@ router.post('/user/login',async (req,res)=>{
     try{
         let authuser = await pool.query(queries.authuser,[email,password])
         if (authuser[0].length >0){
-            res.status(200).send("Authenticated")
+            let details = {...authuser[0][0]}
+            delete details.password
+            res.status(200).send({status:"Authenticated",details:details})
         }else{
             res.status(401).send("Unauthorized User")
         }
@@ -39,7 +41,6 @@ router.post('/user/login',async (req,res)=>{
     }catch(err){
       console.log(err)
     }
-
 })
 
 module.exports = router

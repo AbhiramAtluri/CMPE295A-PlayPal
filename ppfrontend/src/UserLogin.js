@@ -30,16 +30,18 @@ export default function UserLogin() {
     onSubmit: (values) => {
       console.log("inside submit");
       axios.post("http://localhost:8080/auth/user/login",{...values}).then((res)=>{
+        console.log(res.status)
         if(res.status == 401){
           alert("Wrong Password")
         }else{
-          console.log("Success")
+          console.log(res.data.details)
+           window.sessionStorage.setItem("details",JSON.stringify({...res.data.details}))
           setredirectFeed(true)
         }
       }).catch((err)=>{
+        console.log(err)
         alert("Wrong Password")
       })
-      // alert(JSON.stringify(values, null, 2));
     },
   });
   return (

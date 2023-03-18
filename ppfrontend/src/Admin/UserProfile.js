@@ -9,8 +9,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 export default function UserProfile() {
   const [reviewsList, setreviewsList] = useState([1, 2.5, 3, 4, 5, 6, 7]);
+  const user = useSelector((store) => store.verificationDetails.selected);
   return (
     <div style={styles.container}>
       <div style={styles.profile}>
@@ -24,51 +26,49 @@ export default function UserProfile() {
         <div style={styles.details}>
           <div style={styles.row}>
             <label style={styles.labels}>First Name</label>
-            <Typography sx={{ paddingLeft: "3%" }}>Gajala</Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>{user.firstname}</Typography>
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>Last Name</label>
-            <Typography sx={{ paddingLeft: "3%" }}>Washington DC</Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>{user.lastname}</Typography>
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>Mobile</label>
-            <Typography sx={{ paddingLeft: "3%" }}>977899755</Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>{user.mobile}</Typography>
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>Email</label>
-            <Typography sx={{ paddingLeft: "3%" }}>
-              Washington@gmail.com
-            </Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>{user.email}</Typography>
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>City</label>
-            <Typography sx={{ paddingLeft: "3%" }}>Seattle</Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>{user.city}</Typography>
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>State</label>
-            <Typography sx={{ paddingLeft: "3%" }}>Washington</Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>{user.state}</Typography>
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>Date of Birth</label>
-            <Typography sx={{ paddingLeft: "3%" }}>02/19/1997</Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>{user.dob}</Typography>
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>Interests</label>
             <Typography sx={{ paddingLeft: "3%" }}>
-              Badminton,Cricket,American Football
+              {`${user.interests1} , ${user.interests2},${user.interests3}`}
             </Typography>
           </div>
           <div style={styles.row}>
             <label style={styles.labels}>Date Registered</label>
-            <Typography sx={{ paddingLeft: "3%" }}>10/12/2022</Typography>
+            <Typography sx={{ paddingLeft: "3%" }}>
+              {user.registeddate}
+            </Typography>
           </div>
         </div>
       </div>
       <div style={styles.experiences}>
         <Typography variant={"h6"}>Experiences</Typography>
-        <Typography variant="body1">
-          {"Professional Athelete with 10 years of experience in badminton"}
-        </Typography>
+        <Typography variant="body1">{user.experiences}</Typography>
       </div>
       <div style={styles.reviews}>
         <Typography

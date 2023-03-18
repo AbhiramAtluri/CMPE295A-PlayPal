@@ -12,17 +12,20 @@ router.post(
   "/admin/verificationRequests/venue",
   handleSaveVenueVerificationStatus
 );
+// router.get("")
 
 async function handleGetCoachVerificationReq(req, res) {
   const [rows, fields] = await pool.execute(queries.getCoachVerificationReq, [
     "pending",
   ]);
+  rows.forEach((row) => (row.verificationType = "coach"));
   res.send(rows);
 }
 async function handleGetVenueVerificationReq(req, res) {
   const [rows, fields] = await pool.execute(queries.getVenueVerificationReq, [
     "pending",
   ]);
+  rows.forEach((row) => (row.verificationType = "venue"));
   res.send(rows);
 }
 

@@ -21,3 +21,11 @@ app.use("/harsha", harshaRouter);
 app.get("/", function (req, res) {
   res.send("Welcome to PlayPal Backend ");
 });
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error);
+  response.header("Content-Type", "application/json");
+  response.status(500);
+  response.send({ error });
+};
+app.use(errorHandler);

@@ -13,6 +13,9 @@ const saveCoachVerificationStatus =
   "update playpal.users set verificationStatus=? where id=? ";
 const saveVenueVerificationStatus =
   "update playpal.venues set verificationStatus=? where id=?";
+const saveNewTournament =
+  "insert into playpal.tournaments (tournamentname,venueid,startdate,enddate,status,sport,sporttype,noofteams,noofplayersperteam,noofplayers) values(?,?,?,?,?,?,?,?,?,?)";
+const getAllTournaments = "SELECT * FROM playpal.tournaments;";
 module.exports = {
   addNewUser,
   checkuser,
@@ -23,4 +26,6 @@ module.exports = {
   getVenueVerificationReq,
   saveCoachVerificationStatus,
   saveVenueVerificationStatus,
+  saveNewTournament,
+  getAllTournaments,
 };

@@ -5,9 +5,14 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 
-export default function ButtonAppBar() {
+import { useNavigate } from "react-router-dom";
+export default function AdminNavBar() {
+  const navigate = useNavigate();
+  const handleButtonClick = (page) => {
+    if (page == "home") navigate("/admin/home");
+    else if (page == "tournament") navigate("/admin/tournament");
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -28,12 +33,15 @@ export default function ButtonAppBar() {
               display: "flex",
             }}
           >
-            <Typography variant="h6" component="div" sx={{ padding: "15px" }}>
+            <Button sx={override} onClick={() => handleButtonClick("home")}>
               Home
-            </Typography>
-            <Typography variant="h6" component="div" sx={{ padding: "15px" }}>
+            </Button>
+            <Button
+              sx={override}
+              onClick={() => handleButtonClick("tournament")}
+            >
               Tournament
-            </Typography>
+            </Button>
           </Box>
           <Button color="inherit">Logout</Button>
         </Toolbar>
@@ -41,3 +49,11 @@ export default function ButtonAppBar() {
     </Box>
   );
 }
+const override = {
+  my: 2,
+  ml: 2,
+  color: "white",
+  display: "block",
+  background: "#223D56",
+  boxShadow: "none",
+};

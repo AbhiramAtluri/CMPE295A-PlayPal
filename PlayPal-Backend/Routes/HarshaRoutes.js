@@ -14,7 +14,8 @@ router.post(
 );
 router.post("/admin/tournament/new", handleSaveNewTournament);
 router.get("/admin/tournaments/all", handleGetAllTournaments);
-
+router.get("/venues/approved/all", handleGetAllApprovedVenues);
+router.post("/venues/new", handleSaveNewVenue);
 /**
  * To get all pending coach verification requests
  * @param {} req
@@ -107,6 +108,21 @@ async function handleGetAllTournaments(req, res, next) {
   try {
     const result = await pool.execute(queries.getAllTournaments);
     res.send(result[0]);
+  } catch (err) {
+    next(err);
+  }
+}
+async function handleGetAllApprovedVenues(req, res, next) {
+  try {
+    const result = await pool.execute(queries.getAllVenues, ["approved"]);
+    res.send(result[0]);
+  } catch (err) {
+    next(err);
+  }
+}
+async function handleSaveNewVenue(req, res, next) {
+  try {
+    const result = await pool.execute(queries.saveNewVenue, []);
   } catch (err) {
     next(err);
   }

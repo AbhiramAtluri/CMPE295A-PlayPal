@@ -3,7 +3,8 @@ import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-export default function VenueDetails() {
+import { useDispatch, useSelector } from "react-redux";
+export default function VenueDetails(props) {
   const [imageList, setimageList] = useState([
     "https://images.unsplash.com/photo-1632412288009-9b47d5518fad?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1771&q=80",
     "https://images.unsplash.com/photo-1585845708291-df2a96c5b0bf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1746&q=80",
@@ -15,6 +16,9 @@ export default function VenueDetails() {
   const [previous, setprevious] = useState(false);
   const [slideIn, setSlideIn] = useState(true);
   const [slideDirection, setSlideDirection] = useState("down");
+  const dispatch = useDispatch();
+  const venue = useSelector((store) => store.verificationDetails.selected);
+  // const [venue, setvenue] = useState();
   useEffect(() => {
     console.log(index);
   }, [index]);
@@ -83,31 +87,29 @@ export default function VenueDetails() {
       <div style={styles.details}>
         <div style={styles.row}>
           <label style={styles.labels}>Venue Name</label>
-          <Typography sx={{ paddingLeft: "3%" }}>Lords Stadium</Typography>
+          <Typography sx={{ paddingLeft: "3%" }}>{venue.venuename}</Typography>
         </div>
         <div style={styles.row}>
           <label style={styles.labels}>Venue Owner</label>
           <Typography sx={{ paddingLeft: "3%" }}>
-            England Cricket Board
+            {venue.venueownername}
           </Typography>
         </div>
         <div style={styles.row}>
           <label style={styles.labels}>Venue Type</label>
-          <Typography sx={{ paddingLeft: "3%" }}>Cricket</Typography>
+          <Typography sx={{ paddingLeft: "3%" }}>{venue.type}</Typography>
         </div>
         <div style={styles.row}>
           <label style={styles.labels}>Venue City</label>
-          <Typography sx={{ paddingLeft: "3%" }}>Santa clara</Typography>
+          <Typography sx={{ paddingLeft: "3%" }}>{venue.city}</Typography>
         </div>
         <div style={styles.row}>
           <label style={styles.labels}>Venue Mobile</label>
-          <Typography sx={{ paddingLeft: "3%" }}>+16692105647</Typography>
+          <Typography sx={{ paddingLeft: "3%" }}>{venue.mobile}</Typography>
         </div>
         <div style={styles.row}>
           <label style={styles.labels}>Venue Email</label>
-          <Typography sx={{ paddingLeft: "3%" }}>
-            lords.cricket@ecb.com
-          </Typography>
+          <Typography sx={{ paddingLeft: "3%" }}>{venue.email}</Typography>
         </div>
         <div style={styles.row}>
           <label style={styles.labels}>Amenities</label>

@@ -25,6 +25,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useNavigate } from "react-router-dom";
+import { getAllApprovedVenues } from "../../reduxSlices/VenueSlice";
 
 const validationSchema = yup.object({
   tournamentName: yup
@@ -43,6 +44,9 @@ export default function NewTournament(props) {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const formIntialValues = useSelector((state) => state.personalDetails);
+  const approvedVenues = useSelector(
+    (state) => state.venues.approvedVenuesList
+  );
   const handleClose = () => {
     setOpen(false);
     dispatch(resetAdminTournamentStatus());
@@ -72,6 +76,9 @@ export default function NewTournament(props) {
       setOpen(true);
     }
   }, [status.isDone, status.isError]);
+  useEffect(() => {
+    dispatch(getAllApprovedVenues());
+  }, []);
 
   return (
     <div>
@@ -206,9 +213,11 @@ export default function NewTournament(props) {
                 error={formik.touched.venue && Boolean(formik.errors.venue)}
                 helperText={formik.touched.venue && formik.errors.venue}
               >
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                {approvedVenues.map((venue) => {
+                  return (
+                    <MenuItem value={venue.id}>{venue.venuename}</MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
 

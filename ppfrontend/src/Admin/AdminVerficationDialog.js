@@ -20,7 +20,7 @@ export default function AdminVerficationDialog(props) {
   useEffect(() => {
     setid(props.id);
   }, [props.id]);
-  console.log(props.type);
+
   const handleClose = (status) => {
     // If status is not null then dispatch save else just close the dialog
     if (status != null && status != undefined) {
@@ -51,7 +51,11 @@ export default function AdminVerficationDialog(props) {
         <DialogContent dividers={true}>
           <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
             {/* <UserProfile></UserProfile> */}
-            {props.type == "venue" ? <VenueDetails></VenueDetails> : ""}
+            {props.type == "venue" ? (
+              <VenueDetails id={props.id}></VenueDetails>
+            ) : (
+              ""
+            )}
             {props.type == "coach" ? <UserProfile></UserProfile> : ""}
           </DialogContentText>
         </DialogContent>

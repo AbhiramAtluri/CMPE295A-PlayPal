@@ -7,8 +7,7 @@ const addPost =
   "insert into post (posttype,postedbyid,timestamp,posttext,mediaurl,location) values(?,?,?,?,?,?);";
 const getCoachVerificationReq =
   "select * from playpal.users where verificationStatus=?";
-const getVenueVerificationReq =
-  "select * from playpal.venues where verificationStatus=?;";
+const getVenueVerificationReq = `select concat(u.firstname," " ,u.lastname) as venueownername,v.* from playpal.venues as v inner join playpal.users as u on v.venueownerid=u.id where v.verificationStatus=?`;
 const saveCoachVerificationStatus =
   "update playpal.users set verificationStatus=? where id=? ";
 const saveVenueVerificationStatus =
@@ -16,6 +15,9 @@ const saveVenueVerificationStatus =
 const saveNewTournament =
   "insert into playpal.tournaments (tournamentname,venueid,startdate,enddate,status,sport,sporttype,noofteams,noofplayersperteam,noofplayers) values(?,?,?,?,?,?,?,?,?,?)";
 const getAllTournaments = "SELECT * FROM playpal.tournaments;";
+const getAllVenues = "select * from venues where verificationStatus=?;";
+const saveNewVenue =
+  "INSERT INTO playpal.venues ( `venuename`, `type`, `city`, `mobile`, `email`, `amenity1`, `amenity2`, `amenity3`, `amenity4`,`amenity5`,`amenity6`, `noofcourts`,`verifcationReqDT`,) VALUES ( ?,?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?);";
 module.exports = {
   addNewUser,
   checkuser,
@@ -28,4 +30,6 @@ module.exports = {
   saveVenueVerificationStatus,
   saveNewTournament,
   getAllTournaments,
+  getAllVenues,
+  saveNewVenue,
 };

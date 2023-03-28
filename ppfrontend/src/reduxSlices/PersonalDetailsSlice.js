@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
   firstname: "",
@@ -11,8 +12,21 @@ const initialState = {
   city: "",
   state: "",
   zipcode: "",
+  venueOwnerRegistrationIsDone: false,
+  venueOwnerRegistrationIsSucess: false,
 };
-
+const SAVE_VENUE_OWNER_API =
+  "http://localhost:8080/auth/venueOwner/registration";
+export const saveVenueOwner = createAsyncThunk(
+  "personalDetails/saveNewVenueOwner",
+  async (data, thunkAPI) => {
+    let res = axios.post(
+      SAVE_VENUE_OWNER_API,
+      thunkAPI.getState().personalDetails
+    );
+    return res;
+  }
+);
 export const personalDetailsSlice = createSlice({
   name: "personalDetails",
   initialState,
@@ -29,7 +43,21 @@ export const personalDetailsSlice = createSlice({
       state.state = action.payload.state;
       state.zipcode = action.payload.zipcode;
     },
-    resetPersonalDetails: (state) => {},
+    resetPersonalDetails: (state) => {
+      state.venueOwnerRegistrationIsDone = false;
+      state.venueOwnerRegistrationIsSucess = false;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(saveVenueOwner.pending, (state, action) => {});
+    builder.addCase(saveVenueOwner.fulfilled, (state, action) => {
+      state.venueOwnerRegistrationIsDone = true;
+      state.venueOwnerRegistrationIsSucess = true;
+    });
+    builder.addCase(saveVenueOwner.rejected, (state, action) => {
+      state.venueOwnerRegistrationIsDone = true;
+      state.venueOwnerRegistrationIsSucess = false;
+    });
   },
 });
 

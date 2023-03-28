@@ -7,7 +7,6 @@ import Registration from "./Registration";
 import { Typography } from "@mui/material";
 
 export default function Home() {
-  console.log(styles);
   return (
     <div className="main">
       <div className="left">

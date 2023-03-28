@@ -9,13 +9,18 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { store } from "./store";
 import { Provider } from "react-redux";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { PersistGate } from "redux-persist/integration/react";
+import persistStore from "redux-persist/es/persistStore";
 const root = ReactDOM.createRoot(document.getElementById("root"));
+let persistor = persistStore(store);
 root.render(
   <Provider store={store}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <PersistGate loading={null} persistor={persistor}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </PersistGate>
   </Provider>
 );
 

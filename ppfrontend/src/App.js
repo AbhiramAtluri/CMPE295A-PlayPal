@@ -12,6 +12,11 @@ import VenueDetails from "./Admin/VenueDetails";
 import VenueOwnerProfile from "./VenueOwnerProfile";
 import TournamentHome from "./Admin/Tournaments/TournamentHome";
 import NewTournament from "./Admin/Tournaments/NewTournament";
+import VenueOwnerRegistration from "./Venues/VenueOwnerRegistration";
+import VenueOwnerLogin from "./Venues/VenueOwnerLogin";
+import VenueLists from "./Venues/VenueLists";
+import NewVenue from "./Venues/NewVenue";
+import VenueOwnerBookings from "./Venues/VenueOwnerBookings";
 export const themeOptions = createTheme({
   palette: {
     type: "light",
@@ -85,37 +90,34 @@ function App() {
       <ThemeProvider theme={themeOptions}>
         <Routes>
           <Route path="/Home" element={<Home />} />
-        </Routes>
-        <Routes>
           <Route path="/Feed" element={<Userfeed />}></Route>
-        </Routes>
-        <Routes>
           <Route path="/UserLogin" element={<UserLogin />}></Route>
-        </Routes>
-        <Routes>
+          <Route path="/venueOwner/login" element={<VenueOwnerLogin />} />
           <Route path="/Admin/Home" element={<AdminHome />}></Route>
-        </Routes>
-        <Routes>
-          <Route path="UserProfile" element={<UserProfile />}></Route>
-        </Routes>
-        <Routes>
+          <Route path="/UserProfile" element={<UserProfile />}></Route>
           <Route
             path="VenueOwnerProfile"
             element={<VenueOwnerProfile />}
           ></Route>
-        </Routes>
-        <Routes>
           <Route path="/admin/tournament" element={<TournamentHome />}></Route>
-        </Routes>
-        <Routes>
           <Route
             path="/admin/tournament/new"
             element={<NewTournament />}
           ></Route>
+          <Route
+            path="/venueOwnerRegistration"
+            element={<VenueOwnerRegistration />}
+          ></Route>
+          <Route
+            path={"/venueOwner/venue/lists"}
+            element={<VenueLists />}
+          ></Route>
+          <Route path="/venueOwner/venue/new" element={<NewVenue />}></Route>
+          <Route
+            path="/venueOwner/bookings"
+            element={<VenueOwnerBookings />}
+          ></Route>
         </Routes>
-        {/* <Routes>
-          <Route path = "navbar" element = {<NavBar/>}></Route>
-        </Routes> */}
       </ThemeProvider>
     </BrowserRouter>
   );

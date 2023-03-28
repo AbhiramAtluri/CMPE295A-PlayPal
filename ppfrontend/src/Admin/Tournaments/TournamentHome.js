@@ -18,7 +18,7 @@ export default function TournamentHome() {
 
   return (
     <div>
-      <div>
+      <div style={{ position: "sticky", top: 0 }}>
         <AdminNavBar></AdminNavBar>
       </div>
       <div

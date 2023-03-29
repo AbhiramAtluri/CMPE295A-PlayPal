@@ -12,7 +12,8 @@ export default class Userfeed extends Component {
     this.state = {
       location: "San Jose",
       posts: [],
-      details:{}
+      details:{},
+      navigateToChat:false
     }
   }
 

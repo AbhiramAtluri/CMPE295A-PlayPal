@@ -10,6 +10,7 @@ import AdminHome from './Admin/AdminHome'
 import UserProfile from './UserProfile'
 import VenueDetails from './Admin/VenueDetails'
 import VenueOwnerProfile from './VenueOwnerProfile'
+import Chat from './ChatFolder/Chat'
 export const themeOptions = createTheme({
   palette: {
     type: 'light',
@@ -102,9 +103,9 @@ function App() {
             element={<VenueOwnerProfile />}
           ></Route>
         </Routes>
-        {/* <Routes>
-          <Route path = "navbar" element = {<NavBar/>}></Route>
-        </Routes> */}
+        <Routes>
+          <Route path = "/chat" element = {<Chat/>}></Route>
+        </Routes>
       </ThemeProvider>
     </BrowserRouter>
   )

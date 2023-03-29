@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getAllVenuesForOwnerId } from "../reduxSlices/VenueSlice";
+import VenueCard from "./VenueCard";
 import VenueNavBar from "./VenueNavBar";
 const filterOptions = ["All", "Approved", "Pending", "Rejected"];
 export default function VenueLists() {
@@ -75,9 +76,9 @@ export default function VenueLists() {
           Add a Venue
         </Button>
       </div>
-      <div>
+      <div style={{ display: "flex", flexWrap: "wrap" }}>
         {filteredVenues.map((venue) => (
-          <p>{venue.venuename}</p>
+          <VenueCard data={venue} />
         ))}
       </div>
     </div>

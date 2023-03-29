@@ -18,10 +18,16 @@ const saveNewTournament =
 const getAllTournaments = "SELECT * FROM playpal.tournaments;";
 const getAllVenues = "select * from venues where verificationStatus=?;";
 const saveNewVenue =
-  "INSERT INTO playpal.venues ( `venuename`, `type`, `city`, `mobile`, `email`, `amenity1`, `amenity2`, `amenity3`, `amenity4`,`amenity5`,`amenity6`, `noofcourts`,`verifcationReqDT`,) VALUES ( ?,?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?);";
+  "INSERT INTO playpal.venues ( `venueownerid`,`venuename`, `startTime`,`endTime`,`type`,`address`, `city`, `mobile`, `email`, `amenity1`, `amenity2`, `amenity3`, `noofcourts`,`verifcationReqDT`) VALUES ( ?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 const saveVenueOwner = `insert into users (firstname,lastname,email,password,username,mobile,dob,city,type) values(?,?,?,?,?,?,?,?,?)`;
 const authVenueOwner = `select * from users where email=? and type=?`;
-const getAllVenuesForOwnerId = `select * from playpal.venues where venueownerid=?;`;
+const getAllVenuesForOwnerId = `select venue.*,JSON_ARRAYAGG(
+  JSON_OBJECT(
+    'id', images.id,
+    'url', images.url
+  )
+) as url from playpal.venues as venue inner join playpal.venueimages as images on venue.id=images.venueid group by venue.id having venue.venueownerid=?;`;
+const saveVenueImages = `insert into playpal.venueimages (venueId,url) values ?`;
 module.exports = {
   addNewUser,
   checkuser,
@@ -39,4 +45,5 @@ module.exports = {
   saveVenueOwner,
   authVenueOwner,
   getAllVenuesForOwnerId,
+  saveVenueImages,
 };

@@ -231,7 +231,7 @@ export default function PersonaDetailsForm(props) {
             // onClick={props.handleNext}
             type="submit"
           >
-            Next
+            {props.type == "venueOwner" ? "Register" : "Next"}
           </Button>
         </div>
         <div

@@ -1,9 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
+import S3 from "react-aws-s3";
+import config from "../utils/S3upload";
 const initialState = {
   approvedVenuesList: [],
   allVenuesForOwnerId: [],
+  isSaveNewVenueSuccess: false,
+  isSaveNewVenueFailed: false,
+  isLoading: false,
 };
 const GET_APPROVED_VENUES_API =
   "http://localhost:8080/harsha/venues/approved/all";
@@ -23,10 +27,47 @@ export const getAllVenuesForOwnerId = createAsyncThunk(
     return res.data;
   }
 );
+
+export const saveVenueImages = createAsyncThunk(
+  "venueSlice/venuewOwner/venue/images",
+  async (data, thunkAPI) => {
+    const s3Client = new S3(config);
+    let { images } = data;
+
+    let urls = [];
+    for (const image of images) {
+      console.log(image);
+      const ts = Date.now();
+      let fileName = `venueowner-${
+        thunkAPI.getState().profileDetails.id
+      }-${ts}-${image.name}`;
+      let url = await s3Client.uploadFile(image, fileName);
+      console.log(url.location);
+      urls.push(url.location);
+    }
+    data.venueOwnerId = thunkAPI.getState().profileDetails.id;
+    data.urls = urls;
+    thunkAPI.dispatch(saveNewVenue(data));
+  }
+);
+const SAVE_VENUE_API = "http://localhost:8080/harsha/venues/new";
+export const saveNewVenue = createAsyncThunk(
+  "venueSlice/venuewOwner/venue/new",
+  async (data, thunkAPI) => {
+    console.log("Data in save venue", data);
+    let res = await axios.post(SAVE_VENUE_API, data);
+    return res.data;
+  }
+);
 export const venueSlice = createSlice({
   name: "venueSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    resetNewVenueStatus: (state, action) => {
+      state.isSaveNewVenueFailed = false;
+      state.isSaveNewVenueSuccess = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getAllApprovedVenues.pending, (state, action) => {
       console.log("API call made");
@@ -47,7 +88,34 @@ export const venueSlice = createSlice({
     builder.addCase(getAllVenuesForOwnerId.rejected, (state, action) => {
       console.log(action.error);
     });
+
+    builder.addCase(saveNewVenue.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(saveNewVenue.fulfilled, (state, action) => {
+      state.isSaveNewVenueSuccess = true;
+      state.isLoading = false;
+    });
+    builder.addCase(saveNewVenue.rejected, (state, action) => {
+      state.isSaveNewVenueSuccess = false;
+      state.isSaveNewVenueFailed = true;
+      state.isLoading = false;
+      console.log(action.error);
+    });
+
+    builder.addCase(saveVenueImages.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(saveVenueImages.fulfilled, (state, action) => {
+      state.isLoading = false;
+    });
+    builder.addCase(saveVenueImages.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isSaveNewVenueSuccess = false;
+      state.isSaveNewVenueFailed = true;
+      console.log(action.error);
+    });
   },
 });
-export const {} = venueSlice.actions;
+export const { resetNewVenueStatus } = venueSlice.actions;
 export default venueSlice.reducer;

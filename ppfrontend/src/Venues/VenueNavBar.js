@@ -7,11 +7,11 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 
 import { useNavigate } from "react-router-dom";
-export default function AdminNavBar() {
+export default function VenueNavBar() {
   const navigate = useNavigate();
   const handleButtonClick = (page) => {
-    if (page == "home") navigate("/admin/home");
-    else if (page == "tournament") navigate("/admin/tournament");
+    if (page == "home") navigate("/venueOwner/venue/lists");
+    else if (page == "bookings") navigate("/venueOwner/bookings");
   };
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -36,11 +36,8 @@ export default function AdminNavBar() {
             <Button sx={override} onClick={() => handleButtonClick("home")}>
               Home
             </Button>
-            <Button
-              sx={override}
-              onClick={() => handleButtonClick("tournament")}
-            >
-              Tournament
+            <Button sx={override} onClick={() => handleButtonClick("bookings")}>
+              Bookings
             </Button>
           </Box>
           <Button color="inherit">Logout</Button>

@@ -9,6 +9,7 @@ import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setPersonalDetials } from "./reduxSlices/PersonalDetailsSlice";
+import { saveVenueOwner } from "./reduxSlices/PersonalDetailsSlice";
 import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 const validationSchema = yup.object({
@@ -49,10 +50,13 @@ export default function PersonaDetailsForm(props) {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log("inside submit");
-      // alert(JSON.stringify(values, null, 2));
       dispatch(setPersonalDetials(values));
-      props.handleNext();
+      if (props.type == "venueOwner") {
+        console.log("inside submit");
+        dispatch(saveVenueOwner());
+      } else {
+        props.handleNext();
+      }
     },
   });
   return (
@@ -227,7 +231,7 @@ export default function PersonaDetailsForm(props) {
             // onClick={props.handleNext}
             type="submit"
           >
-            Next
+            {props.type == "venueOwner" ? "Register" : "Next"}
           </Button>
         </div>
         <div
@@ -241,7 +245,12 @@ export default function PersonaDetailsForm(props) {
           <Typography variant="p" style={{ paddingRight: "0.5%" }}>
             Already a Member?{" "}
           </Typography>
-          <Link to={"/UserLogin"}> Sign In,here!</Link>
+          <Link
+            to={props.type == "venueOwner" ? "/venueOwner/login" : "/UserLogin"}
+          >
+            {" "}
+            Sign In,here!
+          </Link>
         </div>
       </form>
     </div>

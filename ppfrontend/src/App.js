@@ -11,96 +11,112 @@ import UserProfile from './UserProfile'
 import VenueDetails from './Admin/VenueDetails'
 import VenueOwnerProfile from './VenueOwnerProfile'
 import Chat from './ChatFolder/Chat'
+import TournamentHome from "./Admin/Tournaments/TournamentHome";
+import NewTournament from "./Admin/Tournaments/NewTournament";
+import VenueOwnerRegistration from "./Venues/VenueOwnerRegistration";
+import VenueOwnerLogin from "./Venues/VenueOwnerLogin";
+import VenueLists from "./Venues/VenueLists";
+import NewVenue from "./Venues/NewVenue";
+import VenueOwnerBookings from "./Venues/VenueOwnerBookings";
 export const themeOptions = createTheme({
   palette: {
-    type: 'light',
+    type: "light",
     primary: {
-      main: '#223D56',
+      main: "#223D56",
     },
     secondary: {
-      main: '#f50057',
+      main: "#f50057",
     },
   },
   palette: {
-    type: 'dark',
+    type: "dark",
     primary: {
-      main: '#223D56',
+      main: "#223D56",
     },
     secondary: {
-      main: '#f50057',
+      main: "#f50057",
     },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+          background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
           border: 0,
           borderRadius: 3,
-          boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-          color: 'white',
+          boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+          color: "white",
           height: 48,
-          padding: '0 30px',
+          padding: "0 30px",
         },
       },
     },
   },
   typography: {
     h1: {
-      fontFamily: 'Droid Serif',
+      fontFamily: "Droid Serif",
     },
   },
-})
+});
 
 export const dark = createTheme({
   palette: {
-    type: 'dark',
+    type: "dark",
     primary: {
-      main: '#223D56',
+      main: "#223D56",
     },
     secondary: {
-      main: '#f50057',
+      main: "#f50057",
     },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+          background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
           border: 0,
           borderRadius: 3,
-          boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-          color: 'white',
+          boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+          color: "white",
           height: 48,
-          padding: '0 30px',
+          padding: "0 30px",
         },
       },
     },
   },
-})
+});
 function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={themeOptions}>
         <Routes>
           <Route path="/Home" element={<Home />} />
-        </Routes>
-        <Routes>
           <Route path="/Feed" element={<Userfeed />}></Route>
-        </Routes>
-        <Routes>
           <Route path="/UserLogin" element={<UserLogin />}></Route>
-        </Routes>
-        <Routes>
+          <Route path="/venueOwner/login" element={<VenueOwnerLogin />} />
           <Route path="/Admin/Home" element={<AdminHome />}></Route>
-        </Routes>
-        <Routes>
-          <Route path="UserProfile" element={<UserProfile />}></Route>
-        </Routes>
-        <Routes>
+          <Route path="/UserProfile" element={<UserProfile />}></Route>
           <Route
             path="VenueOwnerProfile"
             element={<VenueOwnerProfile />}
+          ></Route>
+          <Route path="/admin/tournament" element={<TournamentHome />}></Route>
+          <Route
+            path="/admin/tournament/new"
+            element={<NewTournament />}
+          ></Route>
+          <Route
+            path="/venueOwnerRegistration"
+            element={<VenueOwnerRegistration />}
+          ></Route>
+          <Route
+            path={"/venueOwner/venue/lists"}
+            element={<VenueLists />}
+          ></Route>
+          <Route path="/venueOwner/venue/new" element={<NewVenue />}></Route>
+          <Route
+            path="/venueOwner/bookings"
+            element={<VenueOwnerBookings />}
           ></Route>
         </Routes>
         <Routes>
@@ -108,7 +124,7 @@ function App() {
         </Routes>
       </ThemeProvider>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

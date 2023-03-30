@@ -1,5 +1,4 @@
 import AdminNavBar from './Admin/AdminNavBar'
-import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import React from 'react'
 import MediaCard from './Review_Card'
@@ -7,14 +6,67 @@ import Avatar from '@mui/material/Avatar'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import { TextField, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
 import SportsCricketIcon from '@mui/icons-material/SportsCricket'
 import SportsBasketballIcon from '@mui/icons-material/SportsBasketball'
 import SportsTennisIcon from '@mui/icons-material/SportsTennis'
 import FormDialog from './Dialoue_box_function'
+import axios from 'axios';
+import S3 from 'react-aws-s3';
+import config from './utils/S3upload'
 
-function UserProfile() {
-  const [EditProfileDetails, setEditProfileDetails] = useState(false)
+function UserProfile(props) {
+  const [EditProfileDetails, setEditProfileDetails] = useState(true)
+  const [firstname,setfirstname] = useState("")
+  const [lastname,setlastname] = useState("")
+  const [profilepicture,setprofilepicture] = useState("")
+  const [location,setlocation] = useState("")
+  const [dob,setdob] = useState("")
+  const [mobile,setmobile] = useState("")
+  const [interest1,setinterest1] = useState("")
+  const [interest2,setinterest2] = useState("")
+  const [interest3,setinterest3] = useState("")
+
+  useEffect(() => {
+    console.log(props.email)
+       if(props.email == undefined){
+        let details = JSON.parse(sessionStorage.getItem("details"))
+        getProfile(details.email)
+       }else{
+        getProfile(props.email)
+       }
+  },[]);
+
+  const getProfile = (email)=>{
+    console.log(email)
+    axios.post("http://localhost:8080/userprofile/getProfile",{"email":email})
+    .then((res)=>{
+      console.log("Hey")
+      console.log(res.data)
+      setfirstname(res.data.firstname)
+      setlastname(res.data.lastname)
+      setdob(res.data.dob)
+      setlocation(res.data.city)
+      setmobile(res.data.mobile)
+    }).catch((err)=>{
+
+    })
+  }
+
+  const handleOnPicUpload = (e) => {
+    console.log("Handle pic called")
+    console.log(e.target)
+    let filename = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+    console.log(e.target.files[0])
+    const Reacts3client = new S3(config)
+    Reacts3client.uploadFile(e.target.files[0], filename).then(res => {
+      console.log(res)
+      setprofilepicture(res.location)
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
   return (
     <div>
       <div>
@@ -25,7 +77,7 @@ function UserProfile() {
           <div>
             <Avatar
               alt="Profile Picture"
-              src="https://superstarsbio.com/wp-content/uploads/2019/12/actor-Brahmanadam.jpg"
+              src={profilepicture}
               sx={{ width: 400, height: 400 }}
             />
             <div
@@ -35,9 +87,12 @@ function UserProfile() {
                 // flexDirection: 'column',
               }}
             >
-              <Button onClick={() => setEditProfileDetails(true)}>
+              {EditProfileDetails?<input type={"file"} accept="image/*" onChange={handleOnPicUpload}>
+
+              </input>:<Button onClick={() => setEditProfileDetails(true)}>
                 Edit Profile
-              </Button>
+              </Button>}
+
               {EditProfileDetails ? (
                 ''
               ) : (
@@ -74,27 +129,43 @@ function UserProfile() {
 
             <List style={{ textAlign: 'center' }}>
               <ListItem>
-                <label>Name : </label>
+                <label>First Name : </label>
                 {EditProfileDetails ? (
-                  <TextField></TextField>
+                  <TextField placeholder={firstname}></TextField>
                 ) : (
-                  <Typography> Gajala</Typography>
+                  <Typography>{firstname}</Typography>
+                )}
+              </ListItem>
+              <ListItem>
+                <label>Last Name: </label>
+                {EditProfileDetails ? (
+                  <TextField placeholder={lastname}></TextField>
+                ) : (
+                  <Typography>{lastname}</Typography>
                 )}
               </ListItem>
               <ListItem>
                 <label>Date of Birth : </label>
                 {EditProfileDetails ? (
-                  <TextField></TextField>
+                  <TextField type={"date"}></TextField>
                 ) : (
-                  <Typography> 21st July, 1985</Typography>
+                  <Typography>{dob}</Typography>
                 )}
               </ListItem>
               <ListItem>
                 <label>Location : </label>
                 {EditProfileDetails ? (
-                  <TextField></TextField>
+                  <TextField placeholder='location'></TextField>
                 ) : (
-                  <Typography> San Jose, California</Typography>
+                  <Typography> {location}</Typography>
+                )}
+              </ListItem>
+              <ListItem>
+                <label> Mobile Number: </label>
+                {EditProfileDetails ? (
+                  <TextField placeholder={mobile}></TextField>
+                ) : (
+                  <Typography> {mobile}</Typography>
                 )}
               </ListItem>
               <ListItem>

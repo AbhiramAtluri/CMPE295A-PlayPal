@@ -43,8 +43,11 @@ export default function SwipeableTemporaryDrawer() {
     navigate("/chat")
   }
 
-  const NavigateToFeed = ()=>{
+  const navigateToFeed = ()=>{
     navigate("/Feed")
+  }
+  const navigateToProfile = () =>{
+    navigate("/UserProfile")
   }
  
   const list = (anchor) => (
@@ -90,7 +93,7 @@ export default function SwipeableTemporaryDrawer() {
       <List>
         {/* {['All mail', 'Trash', 'Spam'].map((text, index) => ( */}
           <ListItem key={"Profile"} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={navigateToProfile}>
               <ListItemIcon>
                  <AccountBoxIcon /> 
               </ListItemIcon>
@@ -98,7 +101,7 @@ export default function SwipeableTemporaryDrawer() {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding key={"Feed"}>
-            <ListItemButton onClick={NavigateToFeed}>
+            <ListItemButton onClick={navigateToFeed}>
               <ListItemIcon>
                 <HomeIcon ></HomeIcon >
               </ListItemIcon>

@@ -1,4 +1,4 @@
-var express = require('express');
+var express = require("express");
 var app = express();
 var cors = require('cors');
 var bodyParser = require('body-parser')
@@ -8,6 +8,8 @@ const mongoose = require("mongoose");
 const authRouter = require("./Routes/AuthRoutes")
 const feedRouter = require("./Routes/UserFeedRoutes")
 const chatRouter = require("./Routes/ChatRoutes")
+const userProfileRouter = require("./Routes/UserProfileRoutes")
+const harshaRouter = require("./Routes/HarshaRoutes");
 app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -55,7 +57,16 @@ io.on("connection", (socket) => {
 app.use("/auth",authRouter)
 app.use("/feed",feedRouter)
 app.use("/chat",chatRouter)
+app.use("/harsha", harshaRouter);
+app.use("/userprofile",userProfileRouter)
 app.get('/', function (req, res) {
     res.send('Welcome to PlayPal Backend ');
 });
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error);
+  response.header("Content-Type", "application/json");
+  response.status(500);
+  response.send({ error });
+};
+app.use(errorHandler);

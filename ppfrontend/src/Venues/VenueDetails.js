@@ -44,7 +44,8 @@ export default function VenueDetails(props) {
   const dispatch = useDispatch();
   const venue = useSelector((state) => state.venues.venueDetailsById);
   const [mode, setmode] = useState("view");
-
+  //------- TO DO --- GET USERID -----------//
+  let userId = sessionStorage.getItem("details");
   useEffect(() => {
     dispatch(getVenueDetailsById(params.venueId));
   }, [params.venueId]);
@@ -83,12 +84,20 @@ export default function VenueDetails(props) {
             flexDirection: "column",
           }}
         >
-          <Button
-            sx={{ display: "flex", alignSelf: "flex-end", marginRight: "1%" }}
-            onClick={handleModeChange}
-          >
-            {mode == "edit" ? "Cancel" : "Edit"}
-          </Button>
+          {props.userType == "venueOwner" ? (
+            <Button
+              sx={{
+                display: "flex",
+                alignSelf: "flex-end",
+                marginRight: "1%",
+              }}
+              onClick={handleModeChange}
+            >
+              {mode == "edit" ? "Cancel" : "Edit"}
+            </Button>
+          ) : (
+            ""
+          )}
           {mode == "edit" ? (
             <NewVenue type="edit" onModeChange={handleModeChange} />
           ) : (
@@ -100,11 +109,15 @@ export default function VenueDetails(props) {
         className="reviews"
         style={{ border: "groove", margin: "1%", borderRadius: 10 }}
       >
-        <NewReview
-          userType={props.userType}
-          venueId={venue.id}
-          userId={4}
-        ></NewReview>
+        {props.userType == "user" ? (
+          <NewReview
+            userType={props.userType}
+            venueId={venue.id}
+            userId={userId}
+          ></NewReview>
+        ) : (
+          ""
+        )}
         <VenueReviews venueId={venue.id}></VenueReviews>
       </div>
     </div>

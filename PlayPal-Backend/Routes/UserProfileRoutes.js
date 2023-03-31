@@ -20,4 +20,17 @@ router.post("/getProfile", async (req, res) => {
     }
 })
 
+router.post("/updateProfile", async (req, res) => {
+
+    let {firstname,lastname,mobile,city,interests1,interests2,interests3,photo,dob,id} = req.body
+    console.log(firstname,lastname,mobile,city,interests1,interests2,interests3,photo,dob,id)
+    try{
+        let result = await pool.query(queries.updateProfile,[firstname,lastname,mobile,city,interests1,interests2,interests3,photo,dob,id])
+           res.status(200).send("Success")
+    }
+    catch(err){
+       console.log(err)
+}})
+
+
 module.exports = router

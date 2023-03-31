@@ -6,6 +6,8 @@ const getFeed =
 const addPost =
   "insert into post (posttype,postedbyid,timestamp,posttext,mediaurl,location) values(?,?,?,?,?,?);";
 const getEmail = "select email from users where id =?";
+const updateProfile =
+  "update playpal.users set firstname=?,lastname=?,mobile=?,city=?,interests1=?,interests2=?,interests3=?,photo=?,dob=? where id=?";
 
 const getCoachVerificationReq =
   "select * from playpal.users where verificationStatus=?";
@@ -57,6 +59,7 @@ module.exports = {
   authVenueOwner,
   getAllVenuesForOwnerId,
   saveVenueImages,
+  updateProfile,
   getVenueDetailsById,
   updateVenueById,
 };

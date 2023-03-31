@@ -12,6 +12,7 @@ const {
   handleGetAllApprovedVenues,
   handleSaveNewVenue,
   handelGetAllVenuesForOwnerId,
+  handleGetVenueDetailsById,
 } = require("../services/VenueServices");
 /* --------------------Routes by Harsha  ------------------------------*/
 /* -------------------- Admin Routes  ------------------------------*/
@@ -32,4 +33,5 @@ router.get("/admin/tournaments/all", handleGetAllTournaments);
 router.get("/venues/approved/all", handleGetAllApprovedVenues);
 router.post("/venues/new", handleSaveNewVenue);
 router.get("/venueOwner/:id/venues/all", handelGetAllVenuesForOwnerId);
+router.get("/venues/:id", handleGetVenueDetailsById);
 module.exports = router;

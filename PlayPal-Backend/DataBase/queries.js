@@ -28,6 +28,13 @@ const getAllVenuesForOwnerId = `select venue.*,JSON_ARRAYAGG(
   )
 ) as url from playpal.venues as venue inner join playpal.venueimages as images on venue.id=images.venueid group by venue.id having venue.venueownerid=?;`;
 const saveVenueImages = `insert into playpal.venueimages (venueId,url) values ?`;
+const getVenueDetailsById = `select venue.*,
+JSON_ARRAYAGG(
+  JSON_OBJECT(
+    'id', images.id,
+    'url', images.url
+  )
+) as url from playpal.venues as venue inner join playpal.venueimages as images on venue.id=images.venueid group by venue.id having venue.id=?;`;
 module.exports = {
   addNewUser,
   checkuser,
@@ -46,4 +53,5 @@ module.exports = {
   authVenueOwner,
   getAllVenuesForOwnerId,
   saveVenueImages,
+  getVenueDetailsById,
 };

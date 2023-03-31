@@ -29,8 +29,9 @@ import {
   saveVenueImages,
 } from "../reduxSlices/VenueSlice";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 const validationSchema = yup.object({});
-export default function NewVenue() {
+export default function NewVenue(props) {
   const dispatch = useDispatch();
   const [images, setimages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
@@ -38,6 +39,8 @@ export default function NewVenue() {
   const navigate = useNavigate();
   const success = useSelector((state) => state.venues.isSaveNewVenueSuccess);
   const fail = useSelector((state) => state.venues.isSaveNewVenueFailed);
+  const venue = useSelector((state) => state.venues.venueDetailsById);
+  const hiddenFileInput = useRef(null);
   const sportTypes = [
     "Badminton",
     "Cricket",
@@ -66,18 +69,21 @@ export default function NewVenue() {
       amenity1: "",
       amenity2: "",
       amenity3: "",
-
       noofcourts: 0,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
-      dispatch(saveVenueImages(values));
+      if (props.type == "edit") {
+        console.log("Updating venue", values);
+      } else {
+        console.log(values);
+        dispatch(saveVenueImages(values));
+      }
     },
   });
-  const hiddenFileInput = useRef(null);
+
   const handleImages = (event) => {
-    if (Array.from(event.target.files).length > 10) {
+    if (Array.from(event.target.files).length > 100) {
       event.preventDefault();
       alert(`Cannot upload files more than ${10}`);
       return;
@@ -99,14 +105,37 @@ export default function NewVenue() {
       previewImages.forEach((x) => URL.revokeObjectURL(x));
     };
   }, [images]);
+  useEffect(() => {
+    if (props.type == "edit") {
+      formik.setFieldValue("venuename", venue.venuename);
+      formik.setFieldValue("startTime", dayjs(venue.startTime, "h:mm:ss A"));
+      formik.setFieldValue("endTime", dayjs(venue.endTime, "h:mm:ss A"));
+      formik.setFieldValue("type", venue.type);
+      formik.setFieldValue("address", venue.address);
+      formik.setFieldValue("city", venue.city);
+      formik.setFieldValue("email", venue.email);
+      formik.setFieldValue("amenity1", venue.amenity1);
+      formik.setFieldValue("amenity2", venue.amenity2);
+      formik.setFieldValue("amenity3", venue.amenity3);
+      formik.setFieldValue("noofcourts", venue.noofcourts);
+    }
+  }, [props.type, venue]);
 
   return (
-    <div>
-      <div>
-        <VenueNavBar />
-      </div>
+    <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+      {props.type != "edit" ? (
+        <div>
+          <VenueNavBar />
+        </div>
+      ) : (
+        ""
+      )}
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Typography variant="h4">Add a New Venue</Typography>
+        {props.type != "edit" ? (
+          <Typography variant="h4">Add a New Venue</Typography>
+        ) : (
+          ""
+        )}
       </div>
       <Dialog open={previewOpen} onClose={handlePreviewClose}>
         <DialogTitle>Images Preview</DialogTitle>
@@ -147,35 +176,39 @@ export default function NewVenue() {
           }}
           onSubmit={formik.handleSubmit}
         >
-          <div
-            style={{
-              display: "flex",
-              alignSelf: "flex-start",
-              margin: "2%",
-              width: "100%",
-            }}
-          >
-            <Button
-              startIcon={<CloudUploadOutlinedIcon />}
-              onClick={() => hiddenFileInput.current.click()}
-              sx={{ marginRight: "1%", marginLeft: "8%" }}
+          {props.type != "edit" ? (
+            <div
+              style={{
+                display: "flex",
+                alignSelf: "flex-start",
+                margin: "2%",
+                width: "100%",
+              }}
             >
-              Upload Images
-            </Button>
-            <input
-              type="file"
-              multiple
-              onChange={handleImages}
-              style={{ display: "none" }}
-              ref={hiddenFileInput}
-              accept="image/png, image/gif, image/jpeg"
-            ></input>
-            {images.map((image) => (
-              <p variant="a" style={{ color: "blue" }}>
-                {image.name}
-              </p>
-            ))}
-          </div>
+              <Button
+                startIcon={<CloudUploadOutlinedIcon />}
+                onClick={() => hiddenFileInput.current.click()}
+                sx={{ marginRight: "1%", marginLeft: "8%" }}
+              >
+                Upload Images
+              </Button>
+              <input
+                type="file"
+                multiple
+                onChange={handleImages}
+                style={{ display: "none" }}
+                ref={hiddenFileInput}
+                accept="image/png, image/gif, image/jpeg"
+              ></input>
+              {images.map((image) => (
+                <p variant="a" style={{ color: "blue" }}>
+                  {image.name}
+                </p>
+              ))}
+            </div>
+          ) : (
+            ""
+          )}
 
           {/* {Form} */}
           <TextField

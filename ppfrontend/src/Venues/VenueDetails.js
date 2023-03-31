@@ -192,7 +192,7 @@ export function ImageComp(props) {
     setOpen(false);
   };
   const handleImages = (images) => {
-    if (images.length > 0) 
+    // if (images.length > 0)
     // dispatch();
   };
   return (

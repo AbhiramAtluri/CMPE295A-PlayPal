@@ -14,9 +14,12 @@
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.20.0",
         "cors": "^2.8.5",
+        "dotenv": "^16.0.3",
         "express": "^4.17.3",
         "lodash": "^4.17.21",
+        "mongoose": "^7.0.0",
         "mysql2": "^2.3.3",
-        "nodemon": "^2.0.16"
+        "nodemon": "^2.0.16",
+        "socket.io": "^4.6.1"
     }
 }

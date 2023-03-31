@@ -14,6 +14,9 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import StadiumIcon from '@mui/icons-material/Stadium';
 import HistoryIcon from '@mui/icons-material/History';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import HomeIcon from '@mui/icons-material/Home';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function SwipeableTemporaryDrawer() {
   const [state, setState] = React.useState({
@@ -22,6 +25,7 @@ export default function SwipeableTemporaryDrawer() {
     bottom: false,
     right: false,
   });
+  const [navigateToChat, setnavigateToChat] = React.useState(false)
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -31,10 +35,21 @@ export default function SwipeableTemporaryDrawer() {
     ) {
       return;
     }
-
     setState({ ...state, [anchor]: open });
   };
+  const navigate = useNavigate();
+  const GoToChat = ()=>{
 
+    navigate("/chat")
+  }
+
+  const navigateToFeed = ()=>{
+    navigate("/Feed")
+  }
+  const navigateToProfile = () =>{
+    navigate("/UserProfile")
+  }
+ 
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -45,9 +60,13 @@ export default function SwipeableTemporaryDrawer() {
       <List style={{"marginTop":"10px"}}>
         {/* {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => ( */}
           <ListItem disablePadding key={"inbox"}>
-            <ListItemButton>
+            <ListItemButton  onClick={GoToChat}>
               <ListItemIcon>
-                <InboxIcon></InboxIcon>
+                {/* <Link to={"http://localhost:3000/chat"}> */}
+                  <InboxIcon>
+                </InboxIcon>
+                {/* </Link> */}
+      
               </ListItemIcon>
               <ListItemText primary={"Inbox"}/>
             </ListItemButton>
@@ -57,7 +76,7 @@ export default function SwipeableTemporaryDrawer() {
               <ListItemIcon>
                 <StadiumIcon></StadiumIcon>
               </ListItemIcon>
-              <ListItemText primary={"Venue"}/>
+              <ListItemText primary={"Venue/Tournaments"}/>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding key={"History"}>
@@ -68,19 +87,25 @@ export default function SwipeableTemporaryDrawer() {
               <ListItemText primary={"History"}/>
             </ListItemButton>
           </ListItem>
-
-
         {/* // ))} */}
       </List>
       <Divider />
       <List>
         {/* {['All mail', 'Trash', 'Spam'].map((text, index) => ( */}
           <ListItem key={"Profile"} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={navigateToProfile}>
               <ListItemIcon>
                  <AccountBoxIcon /> 
               </ListItemIcon>
               <ListItemText primary={"Profile"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding key={"Feed"}>
+            <ListItemButton onClick={navigateToFeed}>
+              <ListItemIcon>
+                <HomeIcon ></HomeIcon >
+              </ListItemIcon>
+              <ListItemText primary={"Feed"}/>
             </ListItemButton>
           </ListItem>
         {/* // ))} */}

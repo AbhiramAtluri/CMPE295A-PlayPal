@@ -9,8 +9,9 @@ import UserLogin from "./UserLogin";
 import AdminHome from "./Admin/AdminHome";
 import UserProfile from "./UserProfile";
 import VenueDetails from "./Admin/VenueDetails";
-import { default as VenueDetailsVO } from "./Venues/VenueDetails";
 import VenueOwnerProfile from "./VenueOwnerProfile";
+import Chat from "./ChatFolder/Chat";
+import { default as VenueDetailsVO } from "./Venues/VenueDetails";
 import TournamentHome from "./Admin/Tournaments/TournamentHome";
 import NewTournament from "./Admin/Tournaments/NewTournament";
 import VenueOwnerRegistration from "./Venues/VenueOwnerRegistration";
@@ -18,7 +19,7 @@ import VenueOwnerLogin from "./Venues/VenueOwnerLogin";
 import VenueLists from "./Venues/VenueLists";
 import NewVenue from "./Venues/NewVenue";
 import VenueOwnerBookings from "./Venues/VenueOwnerBookings";
-import UploadImages from "./utils/UploadImages";
+
 export const themeOptions = createTheme({
   palette: {
     type: "light",
@@ -123,6 +124,9 @@ function App() {
             path="/venueOwner/venue/:venueId/details"
             element={<VenueDetailsVO userType="venueOwner" />}
           ></Route>
+        </Routes>
+        <Routes>
+          <Route path="/chat" element={<Chat />}></Route>
         </Routes>
       </ThemeProvider>
     </BrowserRouter>

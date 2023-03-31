@@ -3,10 +3,8 @@ var pool = require('../DataBase/db')
 var router = express.Router()
 var queries = require("../DataBase/queries.js")
 
-
 router.post("/getfeed", async (req, res) => {
     let { location } = req.body
-
     try {
         let getfeed = await pool.query(queries.getFeed, [location])
 
@@ -21,8 +19,8 @@ router.post("/getfeed", async (req, res) => {
         console.log(err)
         res.send(err)
     }
-
 })
+
 router.post("/createPost", async (req, res) => {
 
     let { posttype, postedbyid, posttext, mediaurl, location } = req.body

@@ -1,11 +1,10 @@
-const addNewUser = `insert into users (firstname,lastname,mobile,email,password,city,type,interests1,interests2,interests3) values(?,?,?,?,?,?,?,?,?,?);`;
-const checkuser = "select * from users where email =?";
-const authuser =
-  "select * from users where email =? and password =? and type=?";
-const getFeed =
-  "SELECT post.postid, post.posttype, post.timestamp, post.posttext , post.mediaurl, post.location,post.postedbyid , users.firstname , users.lastname from post  inner join users on post.postedbyid = users.id where location =? order by post.timestamp desc";
-const addPost =
-  "insert into post (posttype,postedbyid,timestamp,posttext,mediaurl,location) values(?,?,?,?,?,?);";
+ const addNewUser = `insert into users (firstname,lastname,mobile,email,password,city,type,interests1,interests2,interests3) values(?,?,?,?,?,?,?,?,?,?);`
+ const checkuser = "select * from users where email =?"
+ const authuser =  "select * from users where email =? and password =?"
+ const getFeed = "SELECT post.postid, post.posttype, post.timestamp, post.posttext , post.mediaurl, post.location,post.postedbyid , users.firstname , users.lastname from post  inner join users on post.postedbyid = users.id where location =? order by post.timestamp desc"
+ const addPost = "insert into post (posttype,postedbyid,timestamp,posttext,mediaurl,location) values(?,?,?,?,?,?);"
+ const getEmail = "select email from users where id =?"
+
 const getCoachVerificationReq =
   "select * from playpal.users where verificationStatus=?";
 const getVenueVerificationReq = `select concat(u.firstname," " ,u.lastname) as venueownername,v.* from playpal.venues as v inner join playpal.users as u on v.venueownerid=u.id where v.verificationStatus=?`;
@@ -41,6 +40,7 @@ module.exports = {
   authuser,
   getFeed,
   addPost,
+  getEmail,
   getCoachVerificationReq,
   getVenueVerificationReq,
   saveCoachVerificationStatus,

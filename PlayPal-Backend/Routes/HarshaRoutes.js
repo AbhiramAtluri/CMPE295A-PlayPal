@@ -9,10 +9,18 @@ const {
   handleGetVenueVerificationReq,
 } = require("../services/AdminServices");
 const {
+  handeGetAllVenueReviewsByVenueId,
+  handleSaveNewVenueReview,
+  handleUpdateVenueReviewByReviewId,
+  handleDeleteVenueReviewByReviewId,
+} = require("../services/VenueReviewsServices");
+const {
   handleGetAllApprovedVenues,
   handleSaveNewVenue,
   handelGetAllVenuesForOwnerId,
   handleGetVenueDetailsById,
+  handleSaveImagesByVenueId,
+  handleUpdateVenueById,
 } = require("../services/VenueServices");
 /* --------------------Routes by Harsha  ------------------------------*/
 /* -------------------- Admin Routes  ------------------------------*/
@@ -34,4 +42,11 @@ router.get("/venues/approved/all", handleGetAllApprovedVenues);
 router.post("/venues/new", handleSaveNewVenue);
 router.get("/venueOwner/:id/venues/all", handelGetAllVenuesForOwnerId);
 router.get("/venues/:id", handleGetVenueDetailsById);
+router.post("/venues/images/:venueId", handleSaveImagesByVenueId);
+router.put("/venues/", handleUpdateVenueById);
+/*------------------- Venue Review Routes -----------------------*/
+router.get("/venue/reviews/:venueId", handeGetAllVenueReviewsByVenueId);
+router.post("/venue/review", handleSaveNewVenueReview);
+router.put("/venue/review", handleUpdateVenueReviewByReviewId);
+router.delete("/venue/review/:reviewId", handleDeleteVenueReviewByReviewId);
 module.exports = router;

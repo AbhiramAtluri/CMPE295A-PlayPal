@@ -83,9 +83,66 @@ async function handleGetVenueDetailsById(req, res, next) {
     next(err);
   }
 }
+async function handleSaveImagesByVenueId(req, res, next) {
+  try {
+    const venueId = req.params.venueId;
+
+    let { urls } = req.body;
+    let values = [];
+    urls.forEach((url) => {
+      values.push([venueId, url]);
+    });
+
+    const result = await pool.query(queries.saveVenueImages, [values]);
+    res.send(result[0]);
+  } catch (err) {
+    next(err);
+  }
+}
+async function handleUpdateVenueById(req, res, next) {
+  try {
+    let {
+      id,
+      venuename,
+      startTime,
+      endTime,
+      type,
+      address,
+      city,
+      mobile,
+      email,
+      amenity1,
+      amenity2,
+      amenity3,
+      noofcourts,
+    } = req.body;
+    startTime = new Date(startTime).toLocaleTimeString();
+    endTime = new Date(endTime).toLocaleTimeString();
+    const result = await pool.execute(queries.updateVenueById, [
+      venuename,
+      startTime,
+      endTime,
+      address,
+      type,
+      city,
+      mobile,
+      email,
+      amenity1,
+      amenity2,
+      amenity3,
+      noofcourts,
+      id,
+    ]);
+    res.send(result[0]);
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
   handleGetAllApprovedVenues,
   handleSaveNewVenue,
   handelGetAllVenuesForOwnerId,
   handleGetVenueDetailsById,
+  handleSaveImagesByVenueId,
+  handleUpdateVenueById,
 };

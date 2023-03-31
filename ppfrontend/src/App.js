@@ -1,16 +1,17 @@
-import logo from './logo.svg'
-import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Home from './Home'
-import { createTheme, ThemeProvider } from '@mui/material'
-import Userfeed from './Userfeed'
-import NavBar from './NavBar'
-import UserLogin from './UserLogin'
-import AdminHome from './Admin/AdminHome'
-import UserProfile from './UserProfile'
-import VenueDetails from './Admin/VenueDetails'
-import VenueOwnerProfile from './VenueOwnerProfile'
-import Chat from './ChatFolder/Chat'
+import logo from "./logo.svg";
+import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./Home";
+import { createTheme, ThemeProvider } from "@mui/material";
+import Userfeed from "./Userfeed";
+import NavBar from "./NavBar";
+import UserLogin from "./UserLogin";
+import AdminHome from "./Admin/AdminHome";
+import UserProfile from "./UserProfile";
+import VenueDetails from "./Admin/VenueDetails";
+import VenueOwnerProfile from "./VenueOwnerProfile";
+import Chat from "./ChatFolder/Chat";
+import { default as VenueDetailsVO } from "./Venues/VenueDetails";
 import TournamentHome from "./Admin/Tournaments/TournamentHome";
 import NewTournament from "./Admin/Tournaments/NewTournament";
 import VenueOwnerRegistration from "./Venues/VenueOwnerRegistration";
@@ -18,6 +19,7 @@ import VenueOwnerLogin from "./Venues/VenueOwnerLogin";
 import VenueLists from "./Venues/VenueLists";
 import NewVenue from "./Venues/NewVenue";
 import VenueOwnerBookings from "./Venues/VenueOwnerBookings";
+
 export const themeOptions = createTheme({
   palette: {
     type: "light",
@@ -118,9 +120,13 @@ function App() {
             path="/venueOwner/bookings"
             element={<VenueOwnerBookings />}
           ></Route>
+          <Route
+            path="/venueOwner/venue/:venueId/details"
+            element={<VenueDetailsVO userType="venueOwner" />}
+          ></Route>
         </Routes>
         <Routes>
-          <Route path = "/chat" element = {<Chat/>}></Route>
+          <Route path="/chat" element={<Chat />}></Route>
         </Routes>
       </ThemeProvider>
     </BrowserRouter>

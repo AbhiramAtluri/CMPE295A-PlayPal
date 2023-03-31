@@ -8,6 +8,29 @@ const initialState = {
   isSaveNewVenueSuccess: false,
   isSaveNewVenueFailed: false,
   isLoading: false,
+  venueDetailsById: {
+    id: 0,
+    venueownerid: 0,
+    venuename: "",
+    startTime: "",
+    endTime: "",
+    address: "",
+    type: "",
+    city: "",
+    mobile: "",
+    email: "",
+    amenity1: "",
+    amenity2: "",
+    amenity3: "",
+    amenity4: "",
+    amenity5: "",
+    amenity6: "",
+    noofcourts: 0,
+    verificationStatus: "",
+    verifcationReqDT: "",
+    verificationRespDT: "",
+    url: [],
+  },
 };
 const GET_APPROVED_VENUES_API =
   "http://localhost:8080/harsha/venues/approved/all";
@@ -30,7 +53,7 @@ export const getAllVenuesForOwnerId = createAsyncThunk(
 
 export const saveVenueImages = createAsyncThunk(
   "venueSlice/venuewOwner/venue/images",
-  async (data, thunkAPI) => {
+  async (data, type, thunkAPI) => {
     const s3Client = new S3(config);
     let { images } = data;
 
@@ -56,6 +79,15 @@ export const saveNewVenue = createAsyncThunk(
   async (data, thunkAPI) => {
     console.log("Data in save venue", data);
     let res = await axios.post(SAVE_VENUE_API, data);
+    return res.data;
+  }
+);
+
+export const getVenueDetailsById = createAsyncThunk(
+  "venueSlice/venue/detailsById",
+  async (id, thunkAPI) => {
+    const VENUE_DETAILS_BY_ID = `http://localhost:8080/harsha/venues/${id}`;
+    let res = await axios.get(VENUE_DETAILS_BY_ID);
     return res.data;
   }
 );
@@ -114,6 +146,17 @@ export const venueSlice = createSlice({
       state.isSaveNewVenueSuccess = false;
       state.isSaveNewVenueFailed = true;
       console.log(action.error);
+    });
+
+    builder.addCase(getVenueDetailsById.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getVenueDetailsById.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.venueDetailsById = action.payload.venue[0];
+    });
+    builder.addCase(getVenueDetailsById.rejected, (state, action) => {
+      state.isLoading = false;
     });
   },
 });

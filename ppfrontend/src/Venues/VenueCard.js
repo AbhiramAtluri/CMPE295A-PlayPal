@@ -9,10 +9,15 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function VenueCard(props) {
+  const navigate = useNavigate();
   return (
-    <div style={{ flexBasis: "30%", margin: "1%" }}>
+    <div
+      style={{ flexBasis: "30%", margin: "1%" }}
+      onClick={() => navigate(`/venueOwner/venue/${props.data.id}/details`)}
+    >
       <Card elevation={5}>
         <CardMedia component="img" height="140" image={props.data.url[0].url} />
         <CardContent>

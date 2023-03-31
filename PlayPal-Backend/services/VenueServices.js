@@ -66,11 +66,19 @@ async function handelGetAllVenuesForOwnerId(req, res, next) {
     if (id == undefined || null)
       res.staus(402).send({ message: "Bad Request" });
     let result = await pool.execute(queries.getAllVenuesForOwnerId, [id]);
-    let venues = result[0];
-    // for (let venue of venues) {
-    //   venue.url = venue.url.split[","];
-    // }
     res.send({ venues: result[0] });
+  } catch (err) {
+    next(err);
+  }
+}
+async function handleGetVenueDetailsById(req, res, next) {
+  try {
+    const id = req.params.id;
+    if (id == undefined || null)
+      res.staus(402).send({ message: "Bad Request" });
+    let result = await pool.execute(queries.getVenueDetailsById, [id]);
+    const venue = result[0];
+    res.send({ venue: venue });
   } catch (err) {
     next(err);
   }
@@ -79,4 +87,5 @@ module.exports = {
   handleGetAllApprovedVenues,
   handleSaveNewVenue,
   handelGetAllVenuesForOwnerId,
+  handleGetVenueDetailsById,
 };

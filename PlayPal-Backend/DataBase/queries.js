@@ -4,6 +4,7 @@
  const getFeed = "SELECT post.postid, post.posttype, post.timestamp, post.posttext , post.mediaurl, post.location,post.postedbyid , users.firstname , users.lastname from post  inner join users on post.postedbyid = users.id where location =? order by post.timestamp desc"
  const addPost = "insert into post (posttype,postedbyid,timestamp,posttext,mediaurl,location) values(?,?,?,?,?,?);"
  const getEmail = "select email from users where id =?"
+ const updateProfile = "update playpal.users set firstname=?,lastname=?,mobile=?,city=?,interests1=?,interests2=?,interests3=?,photo=?,dob=? where id=?"
 
 const getCoachVerificationReq =
   "select * from playpal.users where verificationStatus=?";
@@ -46,4 +47,5 @@ module.exports = {
   authVenueOwner,
   getAllVenuesForOwnerId,
   saveVenueImages,
+  updateProfile
 };

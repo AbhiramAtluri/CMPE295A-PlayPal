@@ -34,6 +34,7 @@ import CleanHandsOutlinedIcon from "@mui/icons-material/CleanHandsOutlined";
 import UploadImages from "../utils/UploadImages";
 import CloseIcon from "@mui/icons-material/Close";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import {
   getAllVenueReviewsById,
   saveNewVenueReview,
@@ -148,6 +149,13 @@ function Vdetails() {
           <label style={styles.labels}>VENUE OPERATIONAL HOURS</label>
           <Typography sx={{ paddingLeft: "3%" }}>
             {`${venue.startTime}-${venue.endTime}`}
+          </Typography>
+        </div>
+        <div style={styles.row}>
+          <AttachMoneyIcon />
+          <label style={styles.labels}>Price Per Hour</label>
+          <Typography sx={{ paddingLeft: "3%" }}>
+            {`$${venue.pricePerHour}`}
           </Typography>
         </div>
         <div style={styles.row}>

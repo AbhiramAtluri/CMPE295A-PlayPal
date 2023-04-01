@@ -5,8 +5,10 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
+  InputAdornment,
   InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
   TextField,
   Typography,
@@ -54,6 +56,7 @@ export default function NewVenue(props) {
       startTime: "",
       endTime: "",
       type: "",
+      pricePerHour: 0,
       address: "",
       city: "",
       mobile: "",
@@ -89,6 +92,7 @@ export default function NewVenue(props) {
       formik.setFieldValue("startTime", dayjs(venue.startTime, "h:mm:ss A"));
       formik.setFieldValue("endTime", dayjs(venue.endTime, "h:mm:ss A"));
       formik.setFieldValue("type", venue.type);
+      formik.setFieldValue("pricePerHour", venue.pricePerHour);
       formik.setFieldValue("address", venue.address);
       formik.setFieldValue("city", venue.city);
       formik.setFieldValue("email", venue.email);
@@ -224,36 +228,72 @@ export default function NewVenue(props) {
               />
             </LocalizationProvider>
           </div>
-          <FormControl
-            fullWidth={true}
+          <div
             style={{
-              marginTop: "2%",
-              marginRight: "2%",
-              marginLeft: "2%",
+              display: "flex",
+              flex: 1,
               width: "80%",
             }}
           >
-            <InputLabel id="type-id">Sport Type</InputLabel>
-            <Select
-              id="type"
-              label="Sport Type"
-              labelId="type-id"
-              name="type"
-              value={formik.values.type}
-              onChange={formik.handleChange}
-              error={formik.touched.type && Boolean(formik.errors.type)}
-              helperText={formik.touched.type && formik.errors.type}
-            >
-              {sportTypes.map((type, index) => {
-                return (
-                  <MenuItem key={index} value={type}>
-                    {type}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+            <FormControl
+              fullWidth={true}
+              style={{
+                marginTop: "2%",
+                marginRight: "2%",
 
+                width: "80%",
+              }}
+            >
+              <InputLabel id="type-id">Sport Type</InputLabel>
+              <Select
+                id="type"
+                label="Sport Type"
+                labelId="type-id"
+                name="type"
+                value={formik.values.type}
+                onChange={formik.handleChange}
+                error={formik.touched.type && Boolean(formik.errors.type)}
+                helperText={formik.touched.type && formik.errors.type}
+              >
+                {sportTypes.map((type, index) => {
+                  return (
+                    <MenuItem key={index} value={type}>
+                      {type}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <FormControl
+              style={{
+                marginTop: "2%",
+                marginLeft: "2%",
+                width: "80%",
+              }}
+            >
+              <InputLabel htmlFor="outlined-adornment-amount">
+                Price per Hour
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-amount"
+                startAdornment={
+                  <InputAdornment position="start">$</InputAdornment>
+                }
+                label="Price Per Hour"
+                type="number"
+                name="pricePerHour"
+                value={formik.values.pricePerHour}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.pricePerHour &&
+                  Boolean(formik.errors.pricePerHour)
+                }
+                helperText={
+                  formik.touched.pricePerHour && formik.errors.pricePerHour
+                }
+              ></OutlinedInput>
+            </FormControl>
+          </div>
           <TextField
             id="address"
             label="Address"

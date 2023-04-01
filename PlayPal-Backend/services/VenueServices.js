@@ -25,6 +25,7 @@ async function handleSaveNewVenue(req, res, next) {
       amenity3,
       noofcourts,
       venueOwnerId,
+      pricePerHour,
       urls,
     } = req.body;
     console.log(req.body);
@@ -46,6 +47,7 @@ async function handleSaveNewVenue(req, res, next) {
       amenity3,
       noofcourts,
       verifcationReqDT,
+      pricePerHour,
     ]);
     const venueId = venue[0].insertId;
     let values = [];
@@ -115,6 +117,7 @@ async function handleUpdateVenueById(req, res, next) {
       amenity2,
       amenity3,
       noofcourts,
+      pricePerHour,
     } = req.body;
     startTime = new Date(startTime).toLocaleTimeString();
     endTime = new Date(endTime).toLocaleTimeString();
@@ -131,6 +134,7 @@ async function handleUpdateVenueById(req, res, next) {
       amenity2,
       amenity3,
       noofcourts,
+      pricePerHour,
       id,
     ]);
     res.send(result[0]);

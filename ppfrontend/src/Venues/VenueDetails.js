@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   getVenueDetailsById,
   saveVenueImages,
@@ -39,11 +39,13 @@ import {
   getAllVenueReviewsById,
   saveNewVenueReview,
 } from "../reduxSlices/VenueReviewsSlice";
+import NavBar from "../NavBar";
 
 export default function VenueDetails(props) {
   const params = useParams();
   const dispatch = useDispatch();
   const venue = useSelector((state) => state.venues.venueDetailsById);
+  const navigate = useNavigate();
   const [mode, setmode] = useState("view");
   //------- TO DO --- GET USERID -----------//
   let userId = sessionStorage.getItem("details");
@@ -56,9 +58,7 @@ export default function VenueDetails(props) {
   };
   return (
     <div>
-      <div>
-        <VenueNavBar />
-      </div>
+      <div>{props.userType == "venueOwner" ? <VenueNavBar /> : <NavBar />}</div>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Typography variant="h4">{venue.venuename?.toUpperCase()}</Typography>
@@ -97,7 +97,16 @@ export default function VenueDetails(props) {
               {mode == "edit" ? "Cancel" : "Edit"}
             </Button>
           ) : (
-            ""
+            <Button
+              sx={{
+                display: "flex",
+                alignSelf: "flex-end",
+                marginRight: "1%",
+              }}
+              onClick={() => navigate("/user/venue/booking/new")}
+            >
+              Book a Slot
+            </Button>
           )}
           {mode == "edit" ? (
             <NewVenue type="edit" onModeChange={handleModeChange} />

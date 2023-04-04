@@ -86,7 +86,7 @@ export default function ChatContainer({ currentChat, socket }) {
             <h4>{currentChat.lastname}</h4>
           </div>
         </div>
-        <Logout />
+        {/* <Logout /> */}
       </div>
       <div className="chat-messages">
         {messages.map((message) => {
@@ -140,10 +140,10 @@ const Container = styled.div`
     }
   }
   .chat-messages {
-    padding: 1rem 2rem;
+    padding: 0.5rem 1rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.8rem;
     overflow: auto;
     &::-webkit-scrollbar {
       width: 0.2rem;
@@ -159,10 +159,10 @@ const Container = styled.div`
       .content {
         max-width: 40%;
         overflow-wrap: break-word;
-        padding: 1rem;
+        padding: 0.5rem 0.875rem;
         font-size: 1.1rem;
-        border-radius: 1rem;
-        color: #d1d1d1;
+        border-radius: 1.15rem;
+        // color: white;
         @media screen and (min-width: 720px) and (max-width: 1080px) {
           max-width: 70%;
         }
@@ -171,13 +171,17 @@ const Container = styled.div`
     .sended {
       justify-content: flex-end;
       .content {
-        background-color: #4f04ff21;
+        // background-color: #4f04ff21;
+        background-color: #248bf5;
+        color: white;
       }
     }
     .recieved {
       justify-content: flex-start;
       .content {
-        background-color: #9900ff20;
+        // background-color: #9900ff20;
+        background-color: #fff;
+        color: black;
       }
     }
   }

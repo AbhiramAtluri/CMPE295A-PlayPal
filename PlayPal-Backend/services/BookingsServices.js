@@ -45,28 +45,29 @@ async function handleGetAllBookingByUserId(req, res, next) {
     let bookings = await pool.execute(queries.getAllBookingByUserId, [
       req.params.userId,
     ]);
-    // let map_ = await groupByBookings(bookings);
-    // console.log(map_);
-    // res.send(map_);
-    res.send(
-      _.groupBy(bookings[0], "bookingid")
-      // .map((x) =>
-      //   _.mergeWith({}, ...x, (obj, src) =>
-      //     _.isArray(obj) ? obj.concat(src) : undefined
-      //   )
-      // )
-      // .value()
-    );
+    let venues;
+    let result;
+    if (bookings[0].length > 0) {
+      let venueIds = _.uniq(_.map(bookings[0], "venueid"));
+      venues = await pool.execute(
+        queries.getVenuesDetailsForBookingByVenueIds,
+        [venueIds]
+      );
+      result = await groupByBookings(bookings, venues[0]);
+      res.send({ bookings: [...result] });
+    } else {
+      res.send({ bookings: [] });
+    }
   } catch (err) {
     next(err);
   }
 }
 module.exports = { handleSaveNewBooking, handleGetAllBookingByUserId };
 
-async function groupByBookings(bookings) {
+async function groupByBookings(bookings, venues) {
   let map_ = new Map();
-  for (let i = 0; i < (await bookings[0].length); i++) {
-    let current = await bookings[0][i];
+  for (let i = 0; i < bookings[0].length; i++) {
+    let current = bookings[0][i];
     let {
       bookingid,
       venueid,
@@ -79,12 +80,13 @@ async function groupByBookings(bookings) {
       timeslotend,
       noofcourts,
     } = current;
-    if (map_.has(current.id)) {
-      map_.get(current.id).slots.push({ timeslotstart, timeslotend });
+    if (map_.has(current.bookingid)) {
+      let obj = map_.get(current.bookingid);
+      obj.slots.push({ timeslotstart, timeslotend });
+      map_.set(bookingid, obj);
     } else {
       newObj = {
         bookingid,
-        venueid,
         userid,
         bookingtimestamp,
         bookingstatus,
@@ -92,8 +94,10 @@ async function groupByBookings(bookings) {
         price,
         noofcourts,
       };
+      newObj.venue = venues.filter((x) => x.id == venueid)[0];
       newObj.slots = [];
       newObj.slots.push({ timeslotstart, timeslotend });
+
       map_.set(bookingid, newObj);
     }
   }

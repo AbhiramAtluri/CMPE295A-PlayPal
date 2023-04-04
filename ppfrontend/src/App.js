@@ -20,6 +20,8 @@ import VenueLists from "./Venues/VenueLists";
 import NewVenue from "./Venues/NewVenue";
 import VenueOwnerBookings from "./Venues/VenueOwnerBookings";
 import VenueFeed from "./VenueFeed";
+import UserBooking from "./Bookings/UserBooking";
+import UserBookingsList from "./Bookings/UserBookingsList";
 
 export const themeOptions = createTheme({
   palette: {
@@ -126,9 +128,13 @@ function App() {
             path="/venueOwner/venue/:venueId/details"
             element={<VenueDetailsVO userType="venueOwner" />}
           ></Route>
-        </Routes>
-        <Routes>
           <Route path="/chat" element={<Chat />}></Route>
+          <Route
+            path="/user/venue/:venueId/details"
+            element={<VenueDetailsVO userType={"user"} />}
+          ></Route>
+          <Route path="/user/venue/booking/new" element={<UserBooking />} />
+          <Route path="/user/bookings" element={<UserBookingsList />} />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>

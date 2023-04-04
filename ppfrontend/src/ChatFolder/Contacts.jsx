@@ -1,31 +1,30 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
 // import Logo from "../assets/logo.svg";
 
 export default function Contacts({ contacts, changeChat }) {
-  const [currentUserName, setCurrentUserName] = useState(undefined);
-  const [currentUserImage, setCurrentUserImage] = useState(true);
-  const [currentSelected, setCurrentSelected] = useState(undefined);
+  const [currentUserName, setCurrentUserName] = useState(undefined)
+  const [currentUserImage, setCurrentUserImage] = useState(true)
+  const [currentSelected, setCurrentSelected] = useState(undefined)
   useEffect(() => {
-    const load = async ()=>{
-      const data = await JSON.parse(
-        sessionStorage.getItem("details")
-      );
-      setCurrentUserName(data.firstname);
+    const load = async () => {
+      const data = await JSON.parse(sessionStorage.getItem('details'))
+      setCurrentUserName(data.firstname)
     }
-      load()
-  }, []);
+    load()
+  }, [])
   const changeCurrentChat = (index, contact) => {
-    setCurrentSelected(index);
-    changeChat(contact);
-  };
+    setCurrentSelected(index)
+    changeChat(contact)
+  }
   return (
     <>
       {currentUserImage && currentUserImage && (
         <Container>
           <div className="brand">
             {/* <img src={Logo} alt="logo" /> */}
-            <h3>PlayPal</h3>
+            <img src={'./images/logo.png'}></img>
+            {/* <h4>PlayPal</h4> */}
           </div>
           <div className="contacts">
             {contacts.map((contact, index) => {
@@ -33,7 +32,7 @@ export default function Contacts({ contacts, changeChat }) {
                 <div
                   key={contact.email}
                   className={`contact ${
-                    index === currentSelected ? "selected" : ""
+                    index === currentSelected ? 'selected' : ''
                   }`}
                   onClick={() => changeCurrentChat(index, contact)}
                 >
@@ -44,42 +43,54 @@ export default function Contacts({ contacts, changeChat }) {
                     />
                   </div> */}
                   <div className="username">
-                    <h3>{contact.firstname + " " + contact.lastname}</h3>
+                    <h5>{contact.firstname + ' ' + contact.lastname}</h5>
                   </div>
                 </div>
-              );
+              )
             })}
           </div>
           <div className="current-user">
-            <div className="avatar">
-              {/* <img
+            {/* <div className="avatar"> */}
+            {/* <img
                 // src={`data:image/svg+xml;base64,${currentUserImage}`}
                 alt="avatar"
               /> */}
-            </div>
-            <div className="username">
-              <h2>{currentUserName}</h2>
+            {/* </div> */}
+            <div
+              className="username"
+              style={{
+                display: 'flex',
+                gap: '0.5rem',
+              }}
+            >
+              <div>
+                <h5>Current User : </h5>
+              </div>
+              <div>
+                <h5>{currentUserName}</h5>
+              </div>
             </div>
           </div>
         </Container>
       )}
     </>
-  );
+  )
 }
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 10% 75% 15%;
+  grid-template-rows: 10% 82% 8%;
   overflow: hidden;
-  background-color: #080420;
+  // background-color: black;
   .brand {
     display: flex;
     align-items: center;
+    text-align: center;
     gap: 1rem;
     justify-content: center;
     img {
       height: 2rem;
     }
-    h3 {
+    h4 {
       color: white;
       text-transform: uppercase;
     }
@@ -89,21 +100,22 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     overflow: auto;
-    gap: 0.8rem;
+    gap: 0.3rem;
     &::-webkit-scrollbar {
       width: 0.2rem;
       &-thumb {
         background-color: #ffffff39;
         width: 0.1rem;
-        border-radius: 1rem;
+        border-radius: 1.15rem;
       }
     }
     .contact {
-      background-color: #ffffff34;
-      min-height: 5rem;
+      // background-color: #ffffff34;
+      background-color: black;
+      min-height: 4rem;
       cursor: pointer;
       width: 90%;
-      border-radius: 0.2rem;
+      border-radius: 0.5rem;
       padding: 0.4rem;
       display: flex;
       gap: 1rem;
@@ -115,7 +127,7 @@ const Container = styled.div`
         }
       }
       .username {
-        h3 {
+        h5 {
           color: white;
         }
       }
@@ -126,7 +138,8 @@ const Container = styled.div`
   }
 
   .current-user {
-    background-color: #0d0d30;
+    // background-color: #0d0d30;
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -138,7 +151,7 @@ const Container = styled.div`
       }
     }
     .username {
-      h2 {
+      h5 {
         color: white;
       }
     }
@@ -151,4 +164,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

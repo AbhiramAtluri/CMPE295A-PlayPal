@@ -53,10 +53,10 @@ export const getAllVenuesForOwnerId = createAsyncThunk(
 
 export const saveVenueImages = createAsyncThunk(
   "venueSlice/venuewOwner/venue/images",
-  async (data, type, thunkAPI) => {
+  async (data, thunkAPI) => {
     const s3Client = new S3(config);
-    let { images } = data;
-
+    let { images, venueId, mode } = data;
+    console.log(images, venueId, mode);
     let urls = [];
     for (const image of images) {
       console.log(image);
@@ -68,9 +68,16 @@ export const saveVenueImages = createAsyncThunk(
       console.log(url.location);
       urls.push(url.location);
     }
-    data.venueOwnerId = thunkAPI.getState().profileDetails.id;
-    data.urls = urls;
-    thunkAPI.dispatch(saveNewVenue(data));
+    if (mode == "update") {
+      const SAVE_VENUE_IMAGES_API = `http://localhost:8080/harsha/venues/images/${venueId}`;
+      let res = await axios.post(SAVE_VENUE_IMAGES_API, { urls });
+      thunkAPI.dispatch(getVenueDetailsById(venueId));
+      return res.data;
+    } else {
+      data.venueOwnerId = thunkAPI.getState().profileDetails.id;
+      data.urls = urls;
+      thunkAPI.dispatch(saveNewVenue(data));
+    }
   }
 );
 const SAVE_VENUE_API = "http://localhost:8080/harsha/venues/new";
@@ -91,6 +98,16 @@ export const getVenueDetailsById = createAsyncThunk(
     return res.data;
   }
 );
+export const updateVenueDetailsByid = createAsyncThunk(
+  "venueSlice/venue/updateById",
+  async (values, thunkAPI) => {
+    const UPDATE_VENUE_DETAILS_BY_ID = `http://localhost:8080/harsha/venues`;
+    let res = await axios.put(UPDATE_VENUE_DETAILS_BY_ID, values);
+    thunkAPI.dispatch(getVenueDetailsById(values.id));
+    return res.data;
+  }
+);
+
 export const venueSlice = createSlice({
   name: "venueSlice",
   initialState,

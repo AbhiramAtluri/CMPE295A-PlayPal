@@ -1,77 +1,74 @@
-import React, { useState, useEffect, useRef } from "react";
-import styled from "styled-components";
-import ChatInput from "./ChatInput";
-import Logout from "./Logout";
-import { v4 as uuidv4 } from "uuid";
-import axios from "axios";
+import React, { useState, useEffect, useRef } from 'react'
+import styled from 'styled-components'
+import ChatInput from './ChatInput'
+import Logout from './Logout'
+import { v4 as uuidv4 } from 'uuid'
+import axios from 'axios'
 //  import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes";
 
 export default function ChatContainer({ currentChat, socket }) {
-  const [messages, setMessages] = useState([]);
-  const scrollRef = useRef();
-  const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [messages, setMessages] = useState([])
+  const scrollRef = useRef()
+  const [arrivalMessage, setArrivalMessage] = useState(null)
 
   useEffect(() => {
-    const callChat = async ()=>{
-      const data = JSON.parse(
-        sessionStorage.getItem("details")
-      );
-      const response = await axios.post("http://localhost:8080/chat/getcontactschat", {
-        from: data.email,
-        to: currentChat.email,
-      });
-      setMessages(response.data);
+    const callChat = async () => {
+      const data = JSON.parse(sessionStorage.getItem('details'))
+      const response = await axios.post(
+        'http://localhost:8080/chat/getcontactschat',
+        {
+          from: data.email,
+          to: currentChat.email,
+        }
+      )
+      setMessages(response.data)
     }
     callChat()
-  }, [currentChat]);
+  }, [currentChat])
 
   useEffect(() => {
     const getCurrentChat = async () => {
       if (currentChat) {
-        await JSON.parse(
-          sessionStorage.getItem("details")
-        ).email;
+        await JSON.parse(sessionStorage.getItem('details')).email
       }
-    };
-    getCurrentChat();
-  }, [currentChat]);
+    }
+    getCurrentChat()
+  }, [currentChat])
 
   const handleSendMsg = async (msg) => {
-    const data = await JSON.parse(
-      sessionStorage.getItem("details")
-    );
-    socket.current.emit("send-msg", {
+    const data = await JSON.parse(sessionStorage.getItem('details'))
+    socket.current.emit('send-msg', {
       to: currentChat.email,
       from: data.email,
       msg,
-    });
-    await axios.post("http://localhost:8080/chat/addmessage", {
+    })
+    await axios.post('http://localhost:8080/chat/addmessage', {
       from: data.email,
       to: currentChat.email,
       message: msg,
-    });
+    })
 
-    const msgs = [...messages];
-    msgs.push({ fromSelf: true, message: msg });
-    setMessages(msgs);
-  };
+    const msgs = [...messages]
+    msgs.push({ fromSelf: true, message: msg })
+    setMessages(msgs)
+  }
 
   useEffect(() => {
     if (socket.current) {
-      socket.current.on("msg-recieve", (msg) => {
-        setArrivalMessage({ fromSelf: false, message: msg });
-      });
+      socket.current.on('msg-recieve', (msg) => {
+        setArrivalMessage({ fromSelf: false, message: msg })
+      })
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
-    arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
+    arrivalMessage && setMessages((prev) => [...prev, arrivalMessage])
     console.log(arrivalMessage)
-  }, [arrivalMessage]);
+  }, [arrivalMessage])
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   return (
     <Container>
@@ -83,11 +80,13 @@ export default function ChatContainer({ currentChat, socket }) {
               alt=""
             />
           </div>
-          <div className="username">
-            <h3>{currentChat.firstname}</h3>
+          <div className="username" style={{ display: 'flex', gap: '0.2rem' }}>
+            <h4>{currentChat.firstname}</h4>
+            <h4> </h4>
+            <h4>{currentChat.lastname}</h4>
           </div>
         </div>
-        <Logout />
+        {/* <Logout /> */}
       </div>
       <div className="chat-messages">
         {messages.map((message) => {
@@ -95,7 +94,7 @@ export default function ChatContainer({ currentChat, socket }) {
             <div ref={scrollRef} key={uuidv4()}>
               <div
                 className={`message ${
-                  message.fromSelf ? "sended" : "recieved"
+                  message.fromSelf ? 'sended' : 'recieved'
                 }`}
               >
                 <div className="content ">
@@ -103,12 +102,12 @@ export default function ChatContainer({ currentChat, socket }) {
                 </div>
               </div>
             </div>
-          );
+          )
         })}
       </div>
       <ChatInput handleSendMsg={handleSendMsg} />
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`
@@ -134,17 +133,17 @@ const Container = styled.div`
         }
       }
       .username {
-        h3 {
+        h4 {
           color: white;
         }
       }
     }
   }
   .chat-messages {
-    padding: 1rem 2rem;
+    padding: 0.5rem 1rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.8rem;
     overflow: auto;
     &::-webkit-scrollbar {
       width: 0.2rem;
@@ -160,10 +159,10 @@ const Container = styled.div`
       .content {
         max-width: 40%;
         overflow-wrap: break-word;
-        padding: 1rem;
+        padding: 0.5rem 0.875rem;
         font-size: 1.1rem;
-        border-radius: 1rem;
-        color: #d1d1d1;
+        border-radius: 1.15rem;
+        // color: white;
         @media screen and (min-width: 720px) and (max-width: 1080px) {
           max-width: 70%;
         }
@@ -172,14 +171,18 @@ const Container = styled.div`
     .sended {
       justify-content: flex-end;
       .content {
-        background-color: #4f04ff21;
+        // background-color: #4f04ff21;
+        background-color: #248bf5;
+        color: white;
       }
     }
     .recieved {
       justify-content: flex-start;
       .content {
-        background-color: #9900ff20;
+        // background-color: #9900ff20;
+        background-color: #fff;
+        color: black;
       }
     }
   }
-`;
+`

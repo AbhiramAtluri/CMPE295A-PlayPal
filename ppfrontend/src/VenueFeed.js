@@ -32,7 +32,7 @@ export default function VenueFeed() {
   const navigate = useNavigate();
 
   const goToVenueDetails = (id)=>{
-     navigate(`/venueOwner/venue/${id}/details`)
+     navigate(`/user/venue/${id}/details`)
   }
 
 

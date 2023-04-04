@@ -48,7 +48,7 @@ export default function VenueDetails(props) {
   const navigate = useNavigate();
   const [mode, setmode] = useState("view");
   //------- TO DO --- GET USERID -----------//
-  let userId = sessionStorage.getItem("details");
+  let userId = JSON.parse(sessionStorage.getItem("details")).id;
   useEffect(() => {
     dispatch(getVenueDetailsById(params.venueId));
   }, [params.venueId]);

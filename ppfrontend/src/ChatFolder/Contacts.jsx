@@ -1,31 +1,29 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
 // import Logo from "../assets/logo.svg";
 
 export default function Contacts({ contacts, changeChat }) {
-  const [currentUserName, setCurrentUserName] = useState(undefined);
-  const [currentUserImage, setCurrentUserImage] = useState(true);
-  const [currentSelected, setCurrentSelected] = useState(undefined);
+  const [currentUserName, setCurrentUserName] = useState(undefined)
+  const [currentUserImage, setCurrentUserImage] = useState(true)
+  const [currentSelected, setCurrentSelected] = useState(undefined)
   useEffect(() => {
-    const load = async ()=>{
-      const data = await JSON.parse(
-        sessionStorage.getItem("details")
-      );
-      setCurrentUserName(data.firstname);
+    const load = async () => {
+      const data = await JSON.parse(sessionStorage.getItem('details'))
+      setCurrentUserName(data.firstname)
     }
-      load()
-  }, []);
+    load()
+  }, [])
   const changeCurrentChat = (index, contact) => {
-    setCurrentSelected(index);
-    changeChat(contact);
-  };
+    setCurrentSelected(index)
+    changeChat(contact)
+  }
   return (
     <>
       {currentUserImage && currentUserImage && (
         <Container>
           <div className="brand">
             {/* <img src={Logo} alt="logo" /> */}
-            <h3>PlayPal</h3>
+            <h4>PlayPal</h4>
           </div>
           <div className="contacts">
             {contacts.map((contact, index) => {
@@ -33,7 +31,7 @@ export default function Contacts({ contacts, changeChat }) {
                 <div
                   key={contact.email}
                   className={`contact ${
-                    index === currentSelected ? "selected" : ""
+                    index === currentSelected ? 'selected' : ''
                   }`}
                   onClick={() => changeCurrentChat(index, contact)}
                 >
@@ -44,10 +42,10 @@ export default function Contacts({ contacts, changeChat }) {
                     />
                   </div> */}
                   <div className="username">
-                    <h3>{contact.firstname + " " + contact.lastname}</h3>
+                    <h4>{contact.firstname + ' ' + contact.lastname}</h4>
                   </div>
                 </div>
-              );
+              )
             })}
           </div>
           <div className="current-user">
@@ -57,14 +55,22 @@ export default function Contacts({ contacts, changeChat }) {
                 alt="avatar"
               /> */}
             </div>
-            <div className="username">
-              <h2>{currentUserName}</h2>
+            <div
+              className="username"
+              style={{ display: 'flex', gap: '0.5rem' }}
+            >
+              <div>
+                <h4>Current User : </h4>
+              </div>
+              <div>
+                <h4>{currentUserName}</h4>
+              </div>
             </div>
           </div>
         </Container>
       )}
     </>
-  );
+  )
 }
 const Container = styled.div`
   display: grid;
@@ -79,7 +85,7 @@ const Container = styled.div`
     img {
       height: 2rem;
     }
-    h3 {
+    h4 {
       color: white;
       text-transform: uppercase;
     }
@@ -115,7 +121,7 @@ const Container = styled.div`
         }
       }
       .username {
-        h3 {
+        h4 {
           color: white;
         }
       }
@@ -138,7 +144,7 @@ const Container = styled.div`
       }
     }
     .username {
-      h2 {
+      h4 {
         color: white;
       }
     }
@@ -151,4 +157,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

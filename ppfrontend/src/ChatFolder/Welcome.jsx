@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
 // import Robot from "../assets/robot.gif";
 export default function Welcome() {
   // const [userName, setUserName] = useState("");
@@ -12,13 +12,13 @@ export default function Welcome() {
   // }, []);
   return (
     <Container>
-      <img  alt="" />
+      <img alt="" />
       <h1>
         Welcome, <span></span>
       </h1>
-      <h3>Please select a chat to Start messaging.</h3>
+      <h3>Please select a chat to start messaging.</h3>
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`
@@ -28,9 +28,9 @@ const Container = styled.div`
   color: white;
   flex-direction: column;
   img {
-    height: 20rem;
+    height: 2rem;
   }
   span {
     color: #4e0eff;
   }
-`;
+`

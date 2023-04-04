@@ -103,7 +103,7 @@ function UserBookingListItem(booking) {
         <List component="div" disablePadding>
           <ListItemButton sx={{ pl: 4 }}>
             <ListItemIcon>
-              <StartBorder />
+              <StarBorder />
             </ListItemIcon>
             <ListItemText primary="Starred" />
           </ListItemButton>

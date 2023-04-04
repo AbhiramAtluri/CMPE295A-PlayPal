@@ -23,11 +23,11 @@ router.post("/getfeed", async (req, res) => {
 
 router.post("/createPost", async (req, res) => {
 
-    let { posttype, postedbyid, posttext, mediaurl, location } = req.body
+    let { posttype, postedbyid, posttext, mediaurl, location, email } = req.body
     let timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
     try {
-        console.log(posttype, postedbyid, posttext, mediaurl, location)
-        await pool.query(queries.addPost, [posttype, postedbyid, timestamp, posttext, mediaurl, location])
+        console.log(posttype, postedbyid, posttext, mediaurl, location,email)
+        await pool.query(queries.addPost, [posttype, postedbyid, timestamp, posttext, mediaurl, location, email])
         res.status(200).
             send("Success")
     }

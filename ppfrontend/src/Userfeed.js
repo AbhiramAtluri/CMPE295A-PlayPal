@@ -55,7 +55,7 @@ export default class Userfeed extends Component {
               <div className='col-md-3 '>
               </div>
               <div className='col-md-6 d-flex justify-content-center' style={{ "marginBottom": "30px" }}>
-                <Post key={key} firstname={item.firstname} lastname = {item.lastname} id={item.postedbyid} date={item.timestamp} text={item.posttext} mediaurl={item.mediaurl} location={item.location} posttype={item.posttype}></Post>
+                <Post key={key} firstname={item.firstname} lastname = {item.lastname} id={item.postedbyid} date={item.timestamp} text={item.posttext} mediaurl={item.mediaurl} location={item.location} posttype={item.posttype} email = {item.email}></Post>
               </div>
               <div className='col-md-3'>
               </div>

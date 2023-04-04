@@ -22,7 +22,8 @@ import Button from '@mui/material/Button';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
-
+import UserProfile from './UserProfile';
+import { Link } from 'react-router-dom';
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -44,6 +45,7 @@ export default function Post(props) {
     Tabletennis: "./images/tableTennis.jpeg",
     Tennis: "./images/Tennis.jpeg"
   })
+  const [navigateToProfile,setnavigateToProfile] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [open, setOpen] = React.useState(false);
@@ -75,17 +77,19 @@ export default function Post(props) {
           })
       })
   }
+  const toProfile = ()=>{
+    console.log("Hi")
+    setnavigateToProfile(true)
+  }
 
   React.useEffect(() => {
-    console.log("HEDSD")
     console.log(props)
     console.log(props.mediaurl)
   })
-
-  if (props.mediaurl !== "") {
+if (props.mediaurl !== "") {
     return (
-
       <Card sx={{ maxWidth: 500, minWidth: 500 }}>
+        <Link to={"/UserProfile"} state={{"email":props.email,"id":props.id}} style={{color:"black" }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -94,7 +98,9 @@ export default function Post(props) {
           }
           title={props.firstname + " " + props.lastname}
           subheader={props.timestamp}
+          onClick={toProfile}
         />
+        </Link>
         <CardMedia
           component="img"
           height="200"
@@ -140,6 +146,7 @@ export default function Post(props) {
   } else {
     return (
       <Card sx={{ maxWidth: 500, minWidth: 500 }}>
+         <Link to={"/UserProfile"} state={{"email":props.email,"id":props.id}} style={{color:"black" }} >
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -154,6 +161,7 @@ export default function Post(props) {
           title={props.firstname + " " + props.lastname}
           subheader={props.timestamp}
         />
+        </Link>
         <CardContent>
           <Typography variant="body1" color="text.secondary" style={{ "word-break": "break-word" }}>
             {props.text}

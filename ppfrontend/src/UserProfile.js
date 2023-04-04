@@ -1,24 +1,43 @@
-import AdminNavBar from './Admin/AdminNavBar'
 import Button from '@mui/material/Button'
 import React from 'react'
 import MediaCard from './Review_Card'
 import Avatar from '@mui/material/Avatar'
 import List from '@mui/material/List'
+import PropTypes from 'prop-types';
 import ListItem from '@mui/material/ListItem'
 import { TextField, Typography } from '@mui/material'
 import { useState ,useEffect} from 'react'
-import SportsCricketIcon from '@mui/icons-material/SportsCricket'
-import SportsBasketballIcon from '@mui/icons-material/SportsBasketball'
-import SportsTennisIcon from '@mui/icons-material/SportsTennis'
+import { styled } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
 import FormDialog from './Dialoue_box_function'
 import axios from 'axios';
 import S3 from 'react-aws-s3';
 import config from './utils/S3upload'
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
+import { useLocation } from 'react-router-dom';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Rating from '@mui/material/Rating'
+import NavBar from "./NavBar"
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+}));
+
+
 
 function UserProfile(props) {
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState(2)
   const [EditProfileDetails, setEditProfileDetails] = useState(false)
   const [id,setid] = useState("")
   const [firstname,setfirstname] = useState("")
@@ -30,7 +49,7 @@ function UserProfile(props) {
   const [interest1,setinterest1] = useState("")
   const [interest2,setinterest2] = useState("")
   const [interest3,setinterest3] = useState("")
-
+  const [review,setreview] = useState("")
   const [editedfirstname,seteditedfirstname] = useState(firstname)
   const [editedlastname,seteditedlastname] = useState(lastname)
   const [editedlocation,seteditedlocation] = useState(location)
@@ -40,19 +59,28 @@ function UserProfile(props) {
   const [editedinterest1,seteditedinterest1] = useState(interest1)
   const [editedinterest2,seteditedinterest2] = useState(interest2)
   const [editedinterest3,seteditedinterest3] = useState(interest3)
-  
+  const [profileEditable,setprofileEditable] = useState(true)
+  const [reviewList,setreviewList] = useState([])
+  const [email,setemail] = useState("")
 
-  
-
+  const history = useLocation()
 
   useEffect(() => {
-    console.log(props.email)
-       if(props.email == undefined){
+       if(history.state == null){
         let details = JSON.parse(sessionStorage.getItem("details"))
         getProfile(details.email)
+        setemail(details.email)
+        getReviews(details.id)
+
        }else{
-        getProfile(props.email)
+        const {email,id} = history.state
+        console.log(email+"state")
+        setemail(email)
+        setprofileEditable(false)
+        getProfile(email)
+        getReviews(id)
        }
+
   },[]);
 
   const getProfile = (email)=>{
@@ -82,9 +110,18 @@ function UserProfile(props) {
       setmobile(res.data.mobile)
       seteditedmobile(res.data.mobile)
     }).catch((err)=>{
-
     })
   }
+
+  const getReviews= (id)=>{
+    console.log(id)
+    axios.post("http://localhost:8080/userprofile/getReviews",{"toUserId":id}).then((res)=>{
+      console.log(res)
+      setreviewList(res.data)
+    }).catch(err=>{
+      console.log(err)
+    })
+    }
 
   const handleOnPicUpload = (e) => {
     console.log("Handle pic called")
@@ -122,11 +159,9 @@ function UserProfile(props) {
 const onChangeDoB = (e)=>{
    setediteddob(e.target.value)
 }
-
 const onChangeMobile = (e)=>{
   seteditedmobile(e.target.value)
 }
-
 
  const onCancel = (e)=>{
   seteditedinterest1(interest1)
@@ -149,14 +184,79 @@ const onChangeMobile = (e)=>{
     "id":id
   }).then((res)=>{
     setEditProfileDetails(false)
+    getProfile(email)
   })
 
- } 
+ }
+ const handleClickOpen = () => {
+  setOpen(true);
+};
+const handleClose = () => {
+  setOpen(false);
+};
+
+const handleReviewEntry = (e) =>{
+   console.log(e.target.value)
+   setreview(e.target.value)
+}
+
+const postReview = () =>{
+  if(id ==JSON.parse(sessionStorage.getItem("details")).id)
+  {
+    alert("Sel Review Not possible")
+    setOpen(false)
+  }else{
+    axios.post("http://localhost:8080/userprofile/addReview",{
+      "toUserId":id,
+      "fromUserId":JSON.parse(sessionStorage.getItem("details")).id,
+      "rating":value,
+      "reviewText":review
+  })
+  .then((res)=>{
+alert("Review Posted")
+getReviews(id)
+setOpen(false)
+  }).catch((err)=>{
+    console.log(err)
+  })
+  }
+
+}
+
+function BootstrapDialogTitle(props) {
+  const { children, onClose, ...other } = props;
+
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+}
+
+BootstrapDialogTitle.propTypes = {
+  children: PropTypes.node,
+  onClose: PropTypes.func.isRequired,
+};
+  
 
   return (
     <div>
       <div>
-        <AdminNavBar></AdminNavBar>
+        <NavBar></NavBar>
       </div>
       <div>
         <div style={{ display: 'flex', direction: 'row' }}>
@@ -166,7 +266,7 @@ const onChangeMobile = (e)=>{
               src={editedprofilepicture}
               sx={{ width: 400, height: 400 }}
             />
-            <div
+            {profileEditable?<div
               style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -174,8 +274,9 @@ const onChangeMobile = (e)=>{
               }}
             >
               {EditProfileDetails?<input type={"file"} accept="image/*" onChange={handleOnPicUpload}>
-
-              </input>:<Button onClick={() => setEditProfileDetails(true)}>
+            
+              </input>:
+              <Button onClick={() => setEditProfileDetails(true)}>
                 Edit Profile
               </Button>}
 
@@ -189,10 +290,10 @@ const onChangeMobile = (e)=>{
             expertise in the given box below. Someone from our admin team will
             go through the request and verify."
                   ></FormDialog>
-                  {/* <Button>Register as a Coach</Button> */}
                 </Typography>
               )}
-            </div>
+            </div>:<></>}
+  
           </div>
 
           <List>
@@ -266,7 +367,7 @@ const onChangeMobile = (e)=>{
                 </div>
                 <div className='col-md-6'>
                 {EditProfileDetails ? (
-                  <TextField placeholder='location'></TextField>
+                  <TextField placeholder={location}></TextField>
                 ) : (
                   <Typography> {location}</Typography>
                 )}
@@ -370,18 +471,6 @@ const onChangeMobile = (e)=>{
                 </div>
               </ListItem>
               </div>
-              {/* <ListItem>
-                <label>Interests :</label>
-                {EditProfileDetails ? (
-                  <TextField></TextField>
-                ) : (
-                  <Typography>
-                    <SportsBasketballIcon></SportsBasketballIcon>
-                    <SportsCricketIcon></SportsCricketIcon>
-                    <SportsTennisIcon></SportsTennisIcon>
-                  </Typography>
-                )}
-              </ListItem> */}
             </List>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <ListItem>
@@ -393,9 +482,10 @@ const onChangeMobile = (e)=>{
                   ''
                 )}
               </ListItem>
-              <ListItem>
+              {profileEditable?<ListItem>
                 {EditProfileDetails ? <Button onClick={handleSaveProfile }>Save</Button> : ''}
-              </ListItem>
+              </ListItem>:<></>}
+
             </div>
             
           </List>
@@ -403,7 +493,11 @@ const onChangeMobile = (e)=>{
       </div>
 
       <div class="flexbox-container">
-        <div style={{ padding: '3%' }}>
+        <div className='row'>
+          <div className='col-md-4'>
+
+          </div>
+        <div className='col-md-4 d-flex justify-content-center' style={{ padding: '3%' }}>
           <Typography
             variant="h5"
             sx={{
@@ -419,29 +513,94 @@ const onChangeMobile = (e)=>{
             User Reviews
           </Typography>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
-          <MediaCard
-            name="Rohit"
-            review="John is way ahead of everyone, including most of the instructors."
-            value={4}
-          ></MediaCard>
-          <MediaCard
-            name="Harsha"
-            review="Unlike other instructors he keeps his guidance and help even after the training session."
-            value={5}
-          ></MediaCard>
-          <MediaCard
-            name="Abhiram"
-            review="He is one of those rare instructors who goes over and above right from the start."
-            value={5}
-          ></MediaCard>
-          <MediaCard
-            name="Anuhya"
-            review="One of the best instructors ever!"
-            value={4}
-          ></MediaCard>
+        <div className='col-md-4'>
+
         </div>
+        </div>
+        <div className='row'>
+       
+            <div className='col-md-4'>
+
+            </div>
+            
+            {!profileEditable?<div className='col-md-4 d-flex justify-content-center'>
+            <Button onClick={handleClickOpen}>
+            post a review?
+            </Button>
+            </div>:<></>}
+
+                  
+
+
+            <div className='col-md-4'>
+
+          </div>
+
+          
+        </div>
+          <div className='row'>
+            {reviewList.map((data,key)=>{
+            return <div className='col-md-4 d-flex justify-content-center' style={{marginTop:"30px"}}>
+              <MediaCard
+            name={data.firstname+ " "+data.lastname }
+            review={data.reviewText}
+            rating = {data.rating}
+            
+          ></MediaCard>
+              </div>
+            })}
+          </div>
+    
       </div>
+      {open?    <div>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Open dialog
+      </Button>
+      <BootstrapDialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
+        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+          Post a Review
+        </BootstrapDialogTitle>
+        <DialogContent dividers>
+          <div className='row'>
+            <label>
+              Rating
+            </label>
+          <Rating
+              name="simple-controlled"
+              value={value}
+              onChange={(event, newValue) => {
+                setValue(newValue)
+              }}
+            />
+
+          </div>
+          <div className='row'>
+          <TextField
+            id="outlined-multiline-static"
+            label="Enter Something"
+            multiline
+            rows={8}
+            fullWidth={true}
+            style={{ marginTop: "50px",width:"500px"}}
+            // onChange = {(e)=>{handlePostChange(e)}}
+            inputProps={{ maxLength: 300 }}
+            onChange={(e)=>handleReviewEntry(e)}
+          />
+          </div>
+
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={postReview}>
+            Save Review
+          </Button>
+        </DialogActions>
+      </BootstrapDialog>
+    </div>
+      :<></>}
     </div>
   )
 }

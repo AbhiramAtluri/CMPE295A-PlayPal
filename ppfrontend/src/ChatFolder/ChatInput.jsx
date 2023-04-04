@@ -3,6 +3,8 @@ import { BsEmojiSmileFill } from 'react-icons/bs'
 import { IoMdSend } from 'react-icons/io'
 import styled from 'styled-components'
 import Picker from 'emoji-picker-react'
+import Button from '@mui/material/Button'
+import SendIcon from '@mui/icons-material/Send'
 
 export default function ChatInput({ handleSendMsg }) {
   const [msg, setMsg] = useState('')
@@ -28,10 +30,10 @@ export default function ChatInput({ handleSendMsg }) {
   return (
     <Container>
       <div className="button-container">
-        <div className="emoji">
+        {/* <div className="emoji">
           <BsEmojiSmileFill onClick={handleEmojiPickerhideShow} />
           {showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}
-        </div>
+        </div> */}
       </div>
       <form className="input-container" onSubmit={(event) => sendChat(event)}>
         <input
@@ -40,19 +42,22 @@ export default function ChatInput({ handleSendMsg }) {
           onChange={(e) => setMsg(e.target.value)}
           value={msg}
         />
-        <button type="submit">
-          <IoMdSend />
-        </button>
+        {/* <button type="submit"> */}
+        {/* <IoMdSend /> */}
+        <Button type="submit" variant="contained" endIcon={<SendIcon />}>
+          Send
+        </Button>
+        {/* </button> */}
       </form>
     </Container>
   )
 }
 
 const Container = styled.div`
-  display: grid;
+  display: flex;
   align-items: center;
   grid-template-columns: 5% 95%;
-  background-color: #080420;
+  background-color: #223d56;
   padding: 0 2rem;
   @media screen and (min-width: 720px) and (max-width: 1080px) {
     padding: 0 1rem;
@@ -109,7 +114,7 @@ const Container = styled.div`
       width: 90%;
       height: 60%;
       background-color: transparent;
-      color: white;
+      color: black;
       border: none;
       padding-left: 1rem;
       font-size: 1.2rem;

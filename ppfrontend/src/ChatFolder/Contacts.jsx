@@ -23,7 +23,8 @@ export default function Contacts({ contacts, changeChat }) {
         <Container>
           <div className="brand">
             {/* <img src={Logo} alt="logo" /> */}
-            <h4>PlayPal</h4>
+            <img src={'./images/logo.png'}></img>
+            {/* <h4>PlayPal</h4> */}
           </div>
           <div className="contacts">
             {contacts.map((contact, index) => {
@@ -42,28 +43,31 @@ export default function Contacts({ contacts, changeChat }) {
                     />
                   </div> */}
                   <div className="username">
-                    <h4>{contact.firstname + ' ' + contact.lastname}</h4>
+                    <h5>{contact.firstname + ' ' + contact.lastname}</h5>
                   </div>
                 </div>
               )
             })}
           </div>
           <div className="current-user">
-            <div className="avatar">
-              {/* <img
+            {/* <div className="avatar"> */}
+            {/* <img
                 // src={`data:image/svg+xml;base64,${currentUserImage}`}
                 alt="avatar"
               /> */}
-            </div>
+            {/* </div> */}
             <div
               className="username"
-              style={{ display: 'flex', gap: '0.5rem' }}
+              style={{
+                display: 'flex',
+                gap: '0.5rem',
+              }}
             >
               <div>
-                <h4>Current User : </h4>
+                <h5>Current User : </h5>
               </div>
               <div>
-                <h4>{currentUserName}</h4>
+                <h5>{currentUserName}</h5>
               </div>
             </div>
           </div>
@@ -74,12 +78,13 @@ export default function Contacts({ contacts, changeChat }) {
 }
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 10% 75% 15%;
+  grid-template-rows: 10% 82% 8%;
   overflow: hidden;
-  background-color: #080420;
+  // background-color: black;
   .brand {
     display: flex;
     align-items: center;
+    text-align: center;
     gap: 1rem;
     justify-content: center;
     img {
@@ -95,21 +100,22 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     overflow: auto;
-    gap: 0.8rem;
+    gap: 0.3rem;
     &::-webkit-scrollbar {
       width: 0.2rem;
       &-thumb {
         background-color: #ffffff39;
         width: 0.1rem;
-        border-radius: 1rem;
+        border-radius: 1.15rem;
       }
     }
     .contact {
-      background-color: #ffffff34;
-      min-height: 5rem;
+      // background-color: #ffffff34;
+      background-color: black;
+      min-height: 4rem;
       cursor: pointer;
       width: 90%;
-      border-radius: 0.2rem;
+      border-radius: 0.5rem;
       padding: 0.4rem;
       display: flex;
       gap: 1rem;
@@ -121,7 +127,7 @@ const Container = styled.div`
         }
       }
       .username {
-        h4 {
+        h5 {
           color: white;
         }
       }
@@ -132,7 +138,8 @@ const Container = styled.div`
   }
 
   .current-user {
-    background-color: #0d0d30;
+    // background-color: #0d0d30;
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -144,7 +151,7 @@ const Container = styled.div`
       }
     }
     .username {
-      h4 {
+      h5 {
         color: white;
       }
     }

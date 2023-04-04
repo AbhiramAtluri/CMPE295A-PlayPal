@@ -1,29 +1,29 @@
-import React, { useState } from "react";
-import { BsEmojiSmileFill } from "react-icons/bs";
-import { IoMdSend } from "react-icons/io";
-import styled from "styled-components";
-import Picker from "emoji-picker-react";
+import React, { useState } from 'react'
+import { BsEmojiSmileFill } from 'react-icons/bs'
+import { IoMdSend } from 'react-icons/io'
+import styled from 'styled-components'
+import Picker from 'emoji-picker-react'
 
 export default function ChatInput({ handleSendMsg }) {
-  const [msg, setMsg] = useState("");
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [msg, setMsg] = useState('')
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const handleEmojiPickerhideShow = () => {
-    setShowEmojiPicker(!showEmojiPicker);
-  };
+    setShowEmojiPicker(!showEmojiPicker)
+  }
 
   const handleEmojiClick = (event, emojiObject) => {
-    let message = msg;
-    message += emojiObject.emoji;
-    setMsg(message);
-  };
+    let message = msg
+    message += emojiObject.emoji
+    setMsg(message)
+  }
 
   const sendChat = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     if (msg.length > 0) {
-      handleSendMsg(msg);
-      setMsg("");
+      handleSendMsg(msg)
+      setMsg('')
     }
-  };
+  }
 
   return (
     <Container>
@@ -36,7 +36,7 @@ export default function ChatInput({ handleSendMsg }) {
       <form className="input-container" onSubmit={(event) => sendChat(event)}>
         <input
           type="text"
-          placeholder="type your message here"
+          placeholder="Type a message"
           onChange={(e) => setMsg(e.target.value)}
           value={msg}
         />
@@ -45,7 +45,7 @@ export default function ChatInput({ handleSendMsg }) {
         </button>
       </form>
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`
@@ -104,7 +104,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     gap: 2rem;
-    background-color: #ffffff34;
+    background-color: white;
     input {
       width: 90%;
       height: 60%;
@@ -141,4 +141,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

@@ -24,7 +24,7 @@ export default function UserBookingsList() {
   );
   useEffect(() => {
     dispatch(getAllBookingsByUserId(userId));
-  }, []);
+  }, [userId]);
 
   return (
     <div style={{ height: "100vh" }}>
@@ -52,7 +52,8 @@ export default function UserBookingsList() {
             }
           >
             {bookingsList.map((booking) => {
-              return UserBookingListItem(booking);
+              // return UserBookingListItem(booking);
+              return <UserBookingListItem booking={booking} />;
             })}
           </List>
         </Card>
@@ -60,11 +61,12 @@ export default function UserBookingsList() {
     </div>
   );
 }
-function UserBookingListItem(booking) {
-  const [open, setOpen] = React.useState(true);
+function UserBookingListItem(props) {
+  const [open, setOpen] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
   };
+  let { booking } = props;
   return (
     <React.Fragment>
       <ListItemButton onClick={handleClick}>

@@ -19,6 +19,7 @@ import VenueOwnerLogin from "./Venues/VenueOwnerLogin";
 import VenueLists from "./Venues/VenueLists";
 import NewVenue from "./Venues/NewVenue";
 import VenueOwnerBookings from "./Venues/VenueOwnerBookings";
+import VenueFeed from "./VenueFeed";
 import UserBooking from "./Bookings/UserBooking";
 import UserBookingsList from "./Bookings/UserBookingsList";
 
@@ -100,6 +101,7 @@ function App() {
           <Route path="/venueOwner/login" element={<VenueOwnerLogin />} />
           <Route path="/Admin/Home" element={<AdminHome />}></Route>
           <Route path="/UserProfile" element={<UserProfile />}></Route>
+          <Route path="/VenueFeed" element={<VenueFeed></VenueFeed>}></Route>
           <Route
             path="VenueOwnerProfile"
             element={<VenueOwnerProfile />}

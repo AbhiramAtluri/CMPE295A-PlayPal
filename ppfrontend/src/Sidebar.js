@@ -49,6 +49,9 @@ export default function SwipeableTemporaryDrawer() {
   const navigateToProfile = () =>{
     navigate("/UserProfile")
   }
+  const navigateToVenueFeed = ()=>{
+    navigate("/VenueFeed")
+  }
  
   const list = (anchor) => (
     <Box
@@ -72,7 +75,7 @@ export default function SwipeableTemporaryDrawer() {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding key={"venue"}>
-            <ListItemButton>
+            <ListItemButton onClick={navigateToVenueFeed}>
               <ListItemIcon>
                 <StadiumIcon></StadiumIcon>
               </ListItemIcon>

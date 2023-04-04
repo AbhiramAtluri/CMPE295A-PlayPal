@@ -10,6 +10,7 @@ const feedRouter = require("./Routes/UserFeedRoutes")
 const chatRouter = require("./Routes/ChatRoutes")
 const userProfileRouter = require("./Routes/UserProfileRoutes")
 const harshaRouter = require("./Routes/HarshaRoutes");
+const venueRouter = require("./Routes/VenueRoutes")
 app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -59,6 +60,7 @@ app.use("/feed",feedRouter)
 app.use("/chat",chatRouter)
 app.use("/harsha", harshaRouter);
 app.use("/userprofile",userProfileRouter)
+app.use("/venueFeed",venueRouter)
 app.get('/', function (req, res) {
     res.send('Welcome to PlayPal Backend ');
 });

@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../NavBar";
 import ControlPointOutlinedIcon from "@mui/icons-material/ControlPointOutlined";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
@@ -18,12 +18,19 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
+import { saveNewBooking } from "../reduxSlices/BookingsSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 export default function UserBooking() {
   const venue = useSelector((state) => state.venues.venueDetailsById);
   const [noOfCourts, setnoOfCourts] = useState(0);
   const [date, setdate] = useState(dayjs());
   const [slots, setslots] = useState([]);
-  const [selected, setselected] = useState([]);
+  const [price, setprice] = useState(0);
+  const navigate = useNavigate();
+  const userId = JSON.parse(sessionStorage.getItem("details"))?.id || 0;
+  const dispatch = useDispatch();
+  const saveStatus = useSelector((state) => state.bookings.saveBookingStatus);
 
   useEffect(() => {
     generateSlots(venue.startTime, venue.endTime, date);
@@ -34,10 +41,10 @@ export default function UserBooking() {
     let newSlots = slots;
     newSlots[idx].selected = !newSlots[idx].selected;
     setslots((old) => [...newSlots]);
+    setprice(
+      slots.filter((x) => x.selected == true).length * venue.pricePerHour
+    );
   };
-  useEffect(() => {
-    console.log(slots);
-  }, [slots]);
 
   const generateSlots = (start, end) => {
     let res = [];
@@ -60,10 +67,31 @@ export default function UserBooking() {
       let slotEnd = start.add(i + 1, "hour");
       let data = { id: i, slots: [slotStart, slotEnd], selected: false };
       res.push(data);
-      // console.log(slotStart.format("hh:mm A"), slotEnd.format("hh:mm A"));
       setslots(res);
     }
   };
+  const handleCancel = () => {
+    navigate(`/user/venue/${venue.id}/details`);
+  };
+  const handleConfirm = async () => {
+    let selectedSlots = slots
+      .filter((x) => x.selected == true)
+      .map((x) => x.slots);
+    let data = {
+      venueId: venue.id,
+      userId: userId,
+      noOfCourts,
+      slots: selectedSlots,
+      price: price,
+      bookingTime: dayjs(),
+    };
+    console.log(data);
+    dispatch(saveNewBooking(data));
+  };
+  useEffect(() => {
+    // saveStatus.is;
+  }, [saveStatus]);
+
   const SlotsList = (
     <div className="slots" style={{ display: "flex", flexWrap: "wrap" }}>
       {slots.map((x) => {
@@ -242,10 +270,10 @@ export default function UserBooking() {
                 >{` ${slots.filter((x) => x.selected == true).length} Hr x $${
                   venue.pricePerHour
                 } = `}</Typography>
-                <Typography variant="h6" color={"white"}>{`$${
-                  slots.filter((x) => x.selected == true).length *
-                  venue.pricePerHour
-                }`}</Typography>
+                <Typography
+                  variant="h6"
+                  color={"white"}
+                >{`$${price}`}</Typography>
               </div>
             </div>
           </CardContent>
@@ -257,8 +285,12 @@ export default function UserBooking() {
                 flex: 1,
               }}
             >
-              <Button style={{ margin: "1%" }}>Cancel</Button>
-              <Button style={{ margin: "1%" }}>CONFIRM</Button>
+              <Button style={{ margin: "1%" }} onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button style={{ margin: "1%" }} onClick={handleConfirm}>
+                CONFIRM
+              </Button>
             </div>
           </CardActions>
         </Card>

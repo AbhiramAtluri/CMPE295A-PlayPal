@@ -8,7 +8,10 @@ const {
   handleGetCoachVerificationReq,
   handleGetVenueVerificationReq,
 } = require("../services/AdminServices");
-const { handleSaveNewBooking } = require("../services/BookingsServices");
+const {
+  handleSaveNewBooking,
+  handleGetAllBookingByUserId,
+} = require("../services/BookingsServices");
 const {
   handeGetAllVenueReviewsByVenueId,
   handleSaveNewVenueReview,
@@ -52,4 +55,5 @@ router.put("/venue/review", handleUpdateVenueReviewByReviewId);
 router.delete("/venue/review/:reviewId", handleDeleteVenueReviewByReviewId);
 /*------------------Bookings Routes-------------------------- */
 router.post("/booking", handleSaveNewBooking);
+router.get("/bookings/:userId", handleGetAllBookingByUserId);
 module.exports = router;

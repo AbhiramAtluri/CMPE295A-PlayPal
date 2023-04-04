@@ -4,6 +4,10 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Icon,
   IconButton,
   TextField,
@@ -19,7 +23,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import { saveNewBooking } from "../reduxSlices/BookingsSlice";
+import { resetSaveStatus, saveNewBooking } from "../reduxSlices/BookingsSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 export default function UserBooking() {
   const venue = useSelector((state) => state.venues.venueDetailsById);
@@ -45,7 +49,11 @@ export default function UserBooking() {
       slots.filter((x) => x.selected == true).length * venue.pricePerHour
     );
   };
-
+  const handleClose = () => {
+    if (saveStatus.isSaveDone) navigate("/user/bookings");
+    else navigate(-1);
+    dispatch(resetSaveStatus());
+  };
   const generateSlots = (start, end) => {
     let res = [];
 
@@ -295,6 +303,20 @@ export default function UserBooking() {
           </CardActions>
         </Card>
       </div>
+      <Dialog
+        open={saveStatus.isSaveDone || saveStatus.isSaveHasError}
+        onClose={handleClose}
+      >
+        <DialogTitle>Booking Status</DialogTitle>
+        <DialogContent>
+          {saveStatus.isSaveDone
+            ? "Booking Confirmed"
+            : "Oops Something went Wrong Please Try again"}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Okay</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

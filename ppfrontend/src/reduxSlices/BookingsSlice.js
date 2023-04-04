@@ -26,7 +26,12 @@ export const getAllBookingsByUserId = createAsyncThunk(
 const BookingsSlice = createSlice({
   name: "bookings",
   initialState,
-  reducers: {},
+  reducers: {
+    resetSaveStatus: (state, action) => {
+      state.saveBookingStatus.isSaveDone = false;
+      state.saveBookingStatus.isSaveHasError = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(saveNewBooking.pending, (state, action) => {
       state.saveBookingStatus.isSaveLoadng = true;
@@ -42,6 +47,6 @@ const BookingsSlice = createSlice({
   },
 });
 
-export const {} = BookingsSlice.actions;
+export const { resetSaveStatus } = BookingsSlice.actions;
 
 export default BookingsSlice.reducer;

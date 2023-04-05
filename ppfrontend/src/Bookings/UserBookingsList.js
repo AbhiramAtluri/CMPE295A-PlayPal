@@ -118,7 +118,7 @@ function UserBookingListItem(props) {
               }}
             >
               <Grid container>
-                <Grid item xl={10} md={10}>
+                <Grid item xl={12} md={12}>
                   <Card sx={{ display: "flex" }} elevation={5}>
                     <CardHeader
                       sx={{ width: "50%" }}
@@ -128,8 +128,10 @@ function UserBookingListItem(props) {
                     <CardMedia
                       component={"img"}
                       width="200"
-                      // height={"200"}
+                      height={"300"}
                       image={booking.venue.url[0].url}
+                      sx={{ padding: "1em 1em 0 1em", objectFit: "contain" }}
+                      // image={`https://bttc.com.au/wp-content/uploads/2022/12/Badminton-Game-Playing-Rules.jpg`}
                     ></CardMedia>
                     <CardContent sx={{ width: "100%" }}>
                       <Typography component="div" variant="h5">{`${dayjs(
@@ -160,7 +162,7 @@ function Slots(props) {
       {slots.map((x) => {
         return (
           <Card
-            style={{ flexBasis: "70%", margin: "1%" }}
+            style={{ flexBasis: "50%", margin: "1%" }}
             elevation={8}
             key={x.id}
           >

@@ -29,7 +29,7 @@ import { resetSaveStatus, saveNewBooking } from "../reduxSlices/BookingsSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 export default function UserBooking() {
   const venue = useSelector((state) => state.venues.venueDetailsById);
-  const [noOfCourts, setnoOfCourts] = useState(0);
+  const [noOfCourts, setnoOfCourts] = useState(1);
   const [date, setdate] = useState(dayjs());
   const [slots, setslots] = useState([]);
   const [price, setprice] = useState(0);
@@ -48,10 +48,15 @@ export default function UserBooking() {
     let newSlots = slots;
     newSlots[idx].selected = !newSlots[idx].selected;
     setslots((old) => [...newSlots]);
-    setprice(
-      slots.filter((x) => x.selected == true).length * venue.pricePerHour
-    );
   };
+  useEffect(() => {
+    setprice(
+      slots.filter((x) => x.selected == true).length *
+        venue.pricePerHour *
+        noOfCourts
+    );
+  }, [venue, slots, noOfCourts]);
+
   const handleSnackBarClose = (event, reason) => {
     setsnackbar(false);
   };
@@ -285,7 +290,7 @@ export default function UserBooking() {
                   color={"white"}
                 >{` ${slots.filter((x) => x.selected == true).length} Hr x $${
                   venue.pricePerHour
-                } = `}</Typography>
+                } x ${noOfCourts} courts= `}</Typography>
                 <Typography
                   variant="h6"
                   color={"white"}

@@ -18,10 +18,10 @@ import VenueOwnerRegistration from "./Venues/VenueOwnerRegistration";
 import VenueOwnerLogin from "./Venues/VenueOwnerLogin";
 import VenueLists from "./Venues/VenueLists";
 import NewVenue from "./Venues/NewVenue";
-import VenueOwnerBookings from "./Venues/VenueOwnerBookings";
 import VenueFeed from "./VenueFeed";
 import UserBooking from "./Bookings/UserBooking";
 import UserBookingsList from "./Bookings/UserBookingsList";
+import VenueOwnerBookings from "./Bookings/VenueOwnerBookings";
 
 export const themeOptions = createTheme({
   palette: {

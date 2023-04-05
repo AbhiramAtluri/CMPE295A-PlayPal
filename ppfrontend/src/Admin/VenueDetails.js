@@ -5,12 +5,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useDispatch, useSelector } from "react-redux";
 export default function VenueDetails(props) {
-  const [imageList, setimageList] = useState([
-    "https://images.unsplash.com/photo-1632412288009-9b47d5518fad?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1771&q=80",
-    "https://images.unsplash.com/photo-1585845708291-df2a96c5b0bf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1746&q=80",
-    "https://images.unsplash.com/photo-1675005921870-ccded2e54ce8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-    "https://images.unsplash.com/photo-1519289417163-b07e4859b01a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1674&q=80",
-  ]);
+  const [imageList, setimageList] = useState([]);
   const [index, setindex] = useState(0);
   const [next, setnext] = useState(false);
   const [previous, setprevious] = useState(false);
@@ -20,10 +15,14 @@ export default function VenueDetails(props) {
   const venue = useSelector((store) => store.verificationDetails.selected);
   // const [venue, setvenue] = useState();
   useEffect(() => {
-    console.log(index);
-  }, [index]);
+    if (venue.url != null || undefined) {
+      console.log(venue.url?.filter((x) => x.id != null).map((x) => x.url));
+      setimageList(venue.url?.filter((x) => x.id != null).map((x) => x.url));
+    } else setimageList([]);
+  }, [venue]);
 
   useEffect(() => {
+    console.log(imageList);
     if (index < imageList.length - 1) setnext(true);
   }, [imageList]);
 
@@ -72,7 +71,7 @@ export default function VenueDetails(props) {
                 height: 350,
                 width: 450,
               }}
-              alt="The house from the offer."
+              alt="No Images to Preview"
               src={imageList[index]}
             />
           </div>

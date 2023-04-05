@@ -11,7 +11,7 @@ JSON_ARRAYAGG(
     'id', images.id,
     'url', images.url
   )
-) as url from playpal.venues as venue left join playpal.venueimages as images on venue.id=images.venueid group by venue.id having venue.id in (16,18);
+) as url from playpal.venues as venue left join playpal.venueimages as images on venue.id=images.venueid group by venue.id having venue.id in (?);
 `;
 module.exports = {
   saveNewBooking,

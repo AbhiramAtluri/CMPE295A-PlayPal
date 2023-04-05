@@ -49,10 +49,9 @@ async function handleGetAllBookingByUserId(req, res, next) {
     let result;
     if (bookings[0].length > 0) {
       let venueIds = _.uniq(_.map(bookings[0], "venueid"));
-      venues = await pool.execute(
-        queries.getVenuesDetailsForBookingByVenueIds,
-        [venueIds]
-      );
+      venues = await pool.query(queries.getVenuesDetailsForBookingByVenueIds, [
+        venueIds,
+      ]);
       result = await groupByBookings(bookings, venues[0]);
       res.send({ bookings: [...result] });
     } else {

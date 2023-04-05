@@ -24,7 +24,7 @@ export default function UserBookingsList() {
   );
   useEffect(() => {
     dispatch(getAllBookingsByUserId(userId));
-  }, [userId]);
+  }, []);
 
   return (
     <div style={{ height: "100vh" }}>

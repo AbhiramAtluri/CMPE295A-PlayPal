@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Card,
   CardActions,
@@ -10,6 +11,7 @@ import {
   DialogTitle,
   Icon,
   IconButton,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -31,6 +33,7 @@ export default function UserBooking() {
   const [date, setdate] = useState(dayjs());
   const [slots, setslots] = useState([]);
   const [price, setprice] = useState(0);
+  const [snackbar, setsnackbar] = useState(false);
   const navigate = useNavigate();
   const userId = JSON.parse(sessionStorage.getItem("details"))?.id || 0;
   const dispatch = useDispatch();
@@ -48,6 +51,9 @@ export default function UserBooking() {
     setprice(
       slots.filter((x) => x.selected == true).length * venue.pricePerHour
     );
+  };
+  const handleSnackBarClose = (event, reason) => {
+    setsnackbar(false);
   };
   const handleClose = () => {
     if (saveStatus.isSaveDone) navigate("/user/bookings");
@@ -94,7 +100,9 @@ export default function UserBooking() {
       bookingTime: dayjs(),
     };
     console.log(data);
-    dispatch(saveNewBooking(data));
+    if (noOfCourts > 0 && selectedSlots.length > 0)
+      dispatch(saveNewBooking(data));
+    else setsnackbar(true);
   };
   useEffect(() => {
     // saveStatus.is;
@@ -317,6 +325,15 @@ export default function UserBooking() {
           <Button onClick={handleClose}>Okay</Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={snackbar}
+        autoHideDuration={6000}
+        onClose={handleSnackBarClose}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Please select Slots and Court count
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

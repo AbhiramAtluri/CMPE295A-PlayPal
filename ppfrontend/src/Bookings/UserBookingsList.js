@@ -5,38 +5,101 @@ import {
   CardHeader,
   CardMedia,
   Collapse,
+  FormControl,
   Grid,
+  InputLabel,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   ListSubheader,
+  MenuItem,
+  OutlinedInput,
+  Select,
   Typography,
 } from "@mui/material";
 import { height } from "@mui/system";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../NavBar";
 import { getAllBookingsByUserId } from "../reduxSlices/BookingsSlice";
 import dayjs from "dayjs";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import StarBorder from "@mui/icons-material/StarBorder";
+
 export default function UserBookingsList() {
+  const [filterSelected, setfilterSelected] = useState("All");
   const dispatch = useDispatch();
   const userId = JSON.parse(sessionStorage.getItem("details"))?.id || 0;
   const bookingsList = useSelector(
     (state) => state.bookings.bookingsListForUserId
   );
+  const [filteredBookingsList, setfilteredBookingsList] = useState([]);
+  const filterOptions = ["All", "Past", "Upcoming"];
   useEffect(() => {
     dispatch(getAllBookingsByUserId(userId));
   }, []);
+
+  const handleFilterChange = (event) => {
+    setfilterSelected(event.target.value);
+  };
+  useEffect(() => {
+    if (filterSelected == "Past") {
+      setfilteredBookingsList(
+        bookingsList.filter((x) =>
+          dayjs(x.slots[0].timeslotstart).isBefore(dayjs())
+        )
+      );
+    } else if (filterSelected == "Upcoming") {
+      setfilteredBookingsList(
+        bookingsList.filter((x) =>
+          dayjs(x.slots[0].timeslotstart).isAfter(dayjs())
+        )
+      );
+    } else if (filterSelected == "Accepted") {
+      setfilterSelected(
+        bookingsList.filter((x) => x.bookingstatus === "accepted")
+      );
+    } else if (filterSelected == "Cancelled") {
+      setfilterSelected(
+        bookingsList.filter((x) => x.bookingstatus === "cancelled")
+      );
+    } else if (filterSelected == "Latest") {
+      setfilterSelected(
+        bookingsList.sort((a, b) =>
+          dayjs(a.slots[0].timeslotstart).isAfter(
+            dayjs(b.slots[0].timeslotstart)
+          )
+        )
+      );
+    } else {
+      setfilteredBookingsList(bookingsList);
+    }
+  }, [filterSelected, bookingsList]);
 
   return (
     <div style={{ height: "100vh" }}>
       <div>
         <NavBar />
+      </div>
+      <div style={{ marginLeft: "2%", marginTop: "1%" }}>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <InputLabel id="demo-multiple-name-label">Filter</InputLabel>
+          <Select
+            labelId="demo-multiple-name-label"
+            id="demo-multiple-name"
+            value={filterSelected}
+            onChange={handleFilterChange}
+            input={<OutlinedInput label="Name" />}
+          >
+            {filterOptions.map((name) => (
+              <MenuItem key={name} value={name}>
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </div>
       <div
         className="bookings-list"
@@ -58,7 +121,7 @@ export default function UserBookingsList() {
               </ListSubheader>
             }
           >
-            {bookingsList.map((booking) => {
+            {filteredBookingsList.map((booking) => {
               // return UserBookingListItem(booking);
               return <UserBookingListItem booking={booking} />;
             })}

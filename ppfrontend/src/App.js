@@ -10,13 +10,19 @@ import AdminHome from "./Admin/AdminHome";
 import UserProfile from "./UserProfile";
 import VenueDetails from "./Admin/VenueDetails";
 import VenueOwnerProfile from "./VenueOwnerProfile";
+import Chat from "./ChatFolder/Chat";
+import { default as VenueDetailsVO } from "./Venues/VenueDetails";
 import TournamentHome from "./Admin/Tournaments/TournamentHome";
 import NewTournament from "./Admin/Tournaments/NewTournament";
 import VenueOwnerRegistration from "./Venues/VenueOwnerRegistration";
 import VenueOwnerLogin from "./Venues/VenueOwnerLogin";
 import VenueLists from "./Venues/VenueLists";
 import NewVenue from "./Venues/NewVenue";
-import VenueOwnerBookings from "./Venues/VenueOwnerBookings";
+import VenueFeed from "./VenueFeed";
+import UserBooking from "./Bookings/UserBooking";
+import UserBookingsList from "./Bookings/UserBookingsList";
+import VenueOwnerBookings from "./Bookings/VenueOwnerBookings";
+
 export const themeOptions = createTheme({
   palette: {
     type: "light",
@@ -95,6 +101,7 @@ function App() {
           <Route path="/venueOwner/login" element={<VenueOwnerLogin />} />
           <Route path="/Admin/Home" element={<AdminHome />}></Route>
           <Route path="/UserProfile" element={<UserProfile />}></Route>
+          <Route path="/VenueFeed" element={<VenueFeed></VenueFeed>}></Route>
           <Route
             path="VenueOwnerProfile"
             element={<VenueOwnerProfile />}
@@ -117,6 +124,17 @@ function App() {
             path="/venueOwner/bookings"
             element={<VenueOwnerBookings />}
           ></Route>
+          <Route
+            path="/venueOwner/venue/:venueId/details"
+            element={<VenueDetailsVO userType="venueOwner" />}
+          ></Route>
+          <Route path="/chat" element={<Chat />}></Route>
+          <Route
+            path="/user/venue/:venueId/details"
+            element={<VenueDetailsVO userType={"user"} />}
+          ></Route>
+          <Route path="/user/venue/booking/new" element={<UserBooking />} />
+          <Route path="/user/bookings" element={<UserBookingsList />} />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>

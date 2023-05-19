@@ -106,7 +106,7 @@ export default function Createpost(props) {
         uploadedImage = getImage
       }
 
-      axios.post("http://localhost:8080/feed/createPost",{posttype:getSport,location:props.details.city,postedbyid:props.details.id,posttext:getPost,postedname:props.details.firstname,mediaurl:uploadedImage})
+      axios.post("http://localhost:8080/feed/createPost",{posttype:getSport,location:props.details.city,postedbyid:props.details.id,posttext:getPost,postedname:props.details.firstname,mediaurl:uploadedImage,email:props.details.email})
       .then((res)=>{
         if (res.status === 200){
           handleClose()
@@ -118,7 +118,6 @@ export default function Createpost(props) {
         console.log(err)
       })
   }
-
 
   const handleOnPicUpload = (e) => {
     console.log("Handle pic called")

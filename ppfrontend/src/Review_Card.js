@@ -6,13 +6,19 @@ import CardMedia from '@mui/material/CardMedia'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Rating from '@mui/material/Rating'
+import {useEffect} from 'react'
 // import Typography from '@mui/material/Typography'
 
 export default function MediaCard(props) {
-  //   const [value, setValue] = React.useState(2)
-  const value = 3
+    const [value, setValue] = React.useState(2)
+    
+    useEffect(() => {
+      console.log(props.rating)
+      setValue(props.rating)
+    },[]);
+ 
   return (
-    <Card sx={{ maxWidth: 250 }}>
+    <Card sx={{ maxWidth: 250,minWidth:300 }}>
       {/* <CardMedia
         sx={{ height: 140 }}
         image="/static/images/cards/contemplative-reptile.jpg"
@@ -24,10 +30,10 @@ export default function MediaCard(props) {
           <label>
             <Rating
               name="simple-controlled"
-              value={props.value}
-              // onChange={(event, newValue) => {
-              //   setValue(newValue)
-              // }}
+              value={value}
+              onChange={(event, newValue) => {
+                setValue(newValue)
+              }}
             />
           </label>
         </div>

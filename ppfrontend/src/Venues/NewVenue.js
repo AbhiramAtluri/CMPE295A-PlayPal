@@ -5,11 +5,10 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
-  ImageList,
-  ImageListItem,
-  Input,
+  InputAdornment,
   InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
   TextField,
   Typography,
@@ -19,25 +18,25 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import VenueNavBar from "./VenueNavBar";
 import * as yup from "yup";
-import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import {
   resetNewVenueStatus,
   saveVenueImages,
+  updateVenueDetailsByid,
 } from "../reduxSlices/VenueSlice";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
+import UploadImages from "../utils/UploadImages";
 const validationSchema = yup.object({});
-export default function NewVenue() {
+export default function NewVenue(props) {
   const dispatch = useDispatch();
   const [images, setimages] = useState([]);
-  const [previewImages, setPreviewImages] = useState([]);
-  const [previewOpen, setpreviewOpen] = useState(false);
   const navigate = useNavigate();
   const success = useSelector((state) => state.venues.isSaveNewVenueSuccess);
   const fail = useSelector((state) => state.venues.isSaveNewVenueFailed);
+  const venue = useSelector((state) => state.venues.venueDetailsById);
   const sportTypes = [
     "Badminton",
     "Cricket",
@@ -49,9 +48,7 @@ export default function NewVenue() {
     "Billiards",
   ];
   const amenities = ["Parking", "Equipment", "Lockers", "Shower", "Bevarages"];
-  const handlePreviewClose = () => {
-    setpreviewOpen(false);
-  };
+
   const formik = useFormik({
     initialValues: {
       images: [],
@@ -59,6 +56,7 @@ export default function NewVenue() {
       startTime: "",
       endTime: "",
       type: "",
+      pricePerHour: 0,
       address: "",
       city: "",
       mobile: "",
@@ -66,77 +64,62 @@ export default function NewVenue() {
       amenity1: "",
       amenity2: "",
       amenity3: "",
-
       noofcourts: 0,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
-      dispatch(saveVenueImages(values));
+      if (props.type == "edit") {
+        console.log("Updating venue", values);
+        values.id = venue.id;
+        dispatch(updateVenueDetailsByid(values));
+        props?.onModeChange();
+      } else {
+        console.log(values);
+        values.mode = "new";
+        dispatch(saveVenueImages(values));
+      }
     },
   });
-  const hiddenFileInput = useRef(null);
-  const handleImages = (event) => {
-    if (Array.from(event.target.files).length > 10) {
-      event.preventDefault();
-      alert(`Cannot upload files more than ${10}`);
-      return;
-    }
-    if (event.target.files.length > 0) {
-      setpreviewOpen(true);
-      console.log(event.target.files);
-      let temp = [...event.target.files];
-      // setPreviewImages(temp.map(x=>URL.createObjectURL(x)))
-      setimages(temp);
-      formik.setFieldValue("images", temp);
-    }
+
+  const handleImages = (images) => {
+    formik.setFieldValue("images", images);
+    setimages(images);
   };
+
   useEffect(() => {
-    console.log("creating preview");
-    setPreviewImages(images.map((x) => URL.createObjectURL(x)));
-    return () => {
-      console.log("Removing previous preview from memory");
-      previewImages.forEach((x) => URL.revokeObjectURL(x));
-    };
-  }, [images]);
+    if (props.type == "edit") {
+      formik.setFieldValue("venuename", venue.venuename);
+      formik.setFieldValue("startTime", dayjs(venue.startTime, "h:mm:ss A"));
+      formik.setFieldValue("endTime", dayjs(venue.endTime, "h:mm:ss A"));
+      formik.setFieldValue("type", venue.type);
+      formik.setFieldValue("pricePerHour", venue.pricePerHour);
+      formik.setFieldValue("address", venue.address);
+      formik.setFieldValue("city", venue.city);
+      formik.setFieldValue("email", venue.email);
+      formik.setFieldValue("amenity1", venue.amenity1);
+      formik.setFieldValue("amenity2", venue.amenity2);
+      formik.setFieldValue("amenity3", venue.amenity3);
+      formik.setFieldValue("noofcourts", venue.noofcourts);
+    }
+  }, [props.type, venue]);
 
   return (
-    <div>
-      <div>
-        <VenueNavBar />
-      </div>
+    <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+      {props.type != "edit" ? (
+        <div>
+          <VenueNavBar />
+        </div>
+      ) : (
+        ""
+      )}
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Typography variant="h4">Add a New Venue</Typography>
+        {props.type != "edit" ? (
+          <Typography variant="h4">Add a New Venue</Typography>
+        ) : (
+          ""
+        )}
       </div>
-      <Dialog open={previewOpen} onClose={handlePreviewClose}>
-        <DialogTitle>Images Preview</DialogTitle>
-        <DialogContent>
-          <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-            {images.map((item, index) => (
-              <ImageListItem key={index}>
-                <img src={`${URL.createObjectURL(item)}`} loading="lazy" />
-              </ImageListItem>
-            ))}
-          </ImageList>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setimages([]);
-              handlePreviewClose();
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              handlePreviewClose();
-            }}
-          >
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
+
       <div>
         <form
           style={{
@@ -147,35 +130,25 @@ export default function NewVenue() {
           }}
           onSubmit={formik.handleSubmit}
         >
-          <div
-            style={{
-              display: "flex",
-              alignSelf: "flex-start",
-              margin: "2%",
-              width: "100%",
-            }}
-          >
-            <Button
-              startIcon={<CloudUploadOutlinedIcon />}
-              onClick={() => hiddenFileInput.current.click()}
-              sx={{ marginRight: "1%", marginLeft: "8%" }}
+          {props.type != "edit" ? (
+            <div
+              style={{
+                display: "flex",
+                alignSelf: "flex-start",
+                margin: "2%",
+                width: "100%",
+              }}
             >
-              Upload Images
-            </Button>
-            <input
-              type="file"
-              multiple
-              onChange={handleImages}
-              style={{ display: "none" }}
-              ref={hiddenFileInput}
-              accept="image/png, image/gif, image/jpeg"
-            ></input>
-            {images.map((image) => (
-              <p variant="a" style={{ color: "blue" }}>
-                {image.name}
-              </p>
-            ))}
-          </div>
+              <UploadImages setImages={handleImages} />
+              {images.map((image) => (
+                <p variant="a" style={{ color: "blue" }}>
+                  {image.name}
+                </p>
+              ))}
+            </div>
+          ) : (
+            ""
+          )}
 
           {/* {Form} */}
           <TextField
@@ -255,36 +228,72 @@ export default function NewVenue() {
               />
             </LocalizationProvider>
           </div>
-          <FormControl
-            fullWidth={true}
+          <div
             style={{
-              marginTop: "2%",
-              marginRight: "2%",
-              marginLeft: "2%",
+              display: "flex",
+              flex: 1,
               width: "80%",
             }}
           >
-            <InputLabel id="type-id">Sport Type</InputLabel>
-            <Select
-              id="type"
-              label="Sport Type"
-              labelId="type-id"
-              name="type"
-              value={formik.values.type}
-              onChange={formik.handleChange}
-              error={formik.touched.type && Boolean(formik.errors.type)}
-              helperText={formik.touched.type && formik.errors.type}
-            >
-              {sportTypes.map((type, index) => {
-                return (
-                  <MenuItem key={index} value={type}>
-                    {type}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+            <FormControl
+              fullWidth={true}
+              style={{
+                marginTop: "2%",
+                marginRight: "2%",
 
+                width: "80%",
+              }}
+            >
+              <InputLabel id="type-id">Sport Type</InputLabel>
+              <Select
+                id="type"
+                label="Sport Type"
+                labelId="type-id"
+                name="type"
+                value={formik.values.type}
+                onChange={formik.handleChange}
+                error={formik.touched.type && Boolean(formik.errors.type)}
+                helperText={formik.touched.type && formik.errors.type}
+              >
+                {sportTypes.map((type, index) => {
+                  return (
+                    <MenuItem key={index} value={type}>
+                      {type}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <FormControl
+              style={{
+                marginTop: "2%",
+                marginLeft: "2%",
+                width: "80%",
+              }}
+            >
+              <InputLabel htmlFor="outlined-adornment-amount">
+                Price per Hour
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-amount"
+                startAdornment={
+                  <InputAdornment position="start">$</InputAdornment>
+                }
+                label="Price Per Hour"
+                type="number"
+                name="pricePerHour"
+                value={formik.values.pricePerHour}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.pricePerHour &&
+                  Boolean(formik.errors.pricePerHour)
+                }
+                helperText={
+                  formik.touched.pricePerHour && formik.errors.pricePerHour
+                }
+              ></OutlinedInput>
+            </FormControl>
+          </div>
           <TextField
             id="address"
             label="Address"

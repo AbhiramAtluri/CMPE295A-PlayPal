@@ -8,6 +8,29 @@ const initialState = {
   isSaveNewVenueSuccess: false,
   isSaveNewVenueFailed: false,
   isLoading: false,
+  venueDetailsById: {
+    id: 0,
+    venueownerid: 0,
+    venuename: "",
+    startTime: "",
+    endTime: "",
+    address: "",
+    type: "",
+    city: "",
+    mobile: "",
+    email: "",
+    amenity1: "",
+    amenity2: "",
+    amenity3: "",
+    amenity4: "",
+    amenity5: "",
+    amenity6: "",
+    noofcourts: 0,
+    verificationStatus: "",
+    verifcationReqDT: "",
+    verificationRespDT: "",
+    url: [],
+  },
 };
 const GET_APPROVED_VENUES_API =
   "http://localhost:8080/harsha/venues/approved/all";
@@ -32,8 +55,8 @@ export const saveVenueImages = createAsyncThunk(
   "venueSlice/venuewOwner/venue/images",
   async (data, thunkAPI) => {
     const s3Client = new S3(config);
-    let { images } = data;
-
+    let { images, venueId, mode } = data;
+    console.log(images, venueId, mode);
     let urls = [];
     for (const image of images) {
       console.log(image);
@@ -45,9 +68,16 @@ export const saveVenueImages = createAsyncThunk(
       console.log(url.location);
       urls.push(url.location);
     }
-    data.venueOwnerId = thunkAPI.getState().profileDetails.id;
-    data.urls = urls;
-    thunkAPI.dispatch(saveNewVenue(data));
+    if (mode == "update") {
+      const SAVE_VENUE_IMAGES_API = `http://localhost:8080/harsha/venues/images/${venueId}`;
+      let res = await axios.post(SAVE_VENUE_IMAGES_API, { urls });
+      thunkAPI.dispatch(getVenueDetailsById(venueId));
+      return res.data;
+    } else {
+      data.venueOwnerId = thunkAPI.getState().profileDetails.id;
+      data.urls = urls;
+      thunkAPI.dispatch(saveNewVenue(data));
+    }
   }
 );
 const SAVE_VENUE_API = "http://localhost:8080/harsha/venues/new";
@@ -59,6 +89,25 @@ export const saveNewVenue = createAsyncThunk(
     return res.data;
   }
 );
+
+export const getVenueDetailsById = createAsyncThunk(
+  "venueSlice/venue/detailsById",
+  async (id, thunkAPI) => {
+    const VENUE_DETAILS_BY_ID = `http://localhost:8080/harsha/venues/${id}`;
+    let res = await axios.get(VENUE_DETAILS_BY_ID);
+    return res.data;
+  }
+);
+export const updateVenueDetailsByid = createAsyncThunk(
+  "venueSlice/venue/updateById",
+  async (values, thunkAPI) => {
+    const UPDATE_VENUE_DETAILS_BY_ID = `http://localhost:8080/harsha/venues`;
+    let res = await axios.put(UPDATE_VENUE_DETAILS_BY_ID, values);
+    thunkAPI.dispatch(getVenueDetailsById(values.id));
+    return res.data;
+  }
+);
+
 export const venueSlice = createSlice({
   name: "venueSlice",
   initialState,
@@ -114,6 +163,17 @@ export const venueSlice = createSlice({
       state.isSaveNewVenueSuccess = false;
       state.isSaveNewVenueFailed = true;
       console.log(action.error);
+    });
+
+    builder.addCase(getVenueDetailsById.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getVenueDetailsById.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.venueDetailsById = action.payload.venue[0];
+    });
+    builder.addCase(getVenueDetailsById.rejected, (state, action) => {
+      state.isLoading = false;
     });
   },
 });

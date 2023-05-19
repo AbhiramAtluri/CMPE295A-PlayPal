@@ -10,12 +10,20 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import TryIcon from '@mui/icons-material/Try';
-
+import ResponsiveDialog from './ResponsiveDialog';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import axios from 'axios';
+import UserProfile from './UserProfile';
+import { Link } from 'react-router-dom';
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -29,92 +37,166 @@ const ExpandMore = styled((props) => {
 
 export default function Post(props) {
   const [expanded, setExpanded] = React.useState(false);
-  const [imageCache,setimageCache] = React.useState({
-    Badminton:"./images/Badminton.png",
-    Baseball:"./images/baseball.jpeg",
-    Cricket:"./images/cricket.webp",
-    Soccer:"./images/soccer.webp",
-    Tabletennis:"./images/tableTennis.jpeg",
-    Tennis:"./images/Tennis.jpeg"
+  const [imageCache, setimageCache] = React.useState({
+    Badminton: "./images/Badminton.png",
+    Baseball: "./images/baseball.jpeg",
+    Cricket: "./images/cricket.webp",
+    Soccer: "./images/soccer.webp",
+    Tabletennis: "./images/tableTennis.jpeg",
+    Tennis: "./images/Tennis.jpeg"
   })
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const [navigateToProfile,setnavigateToProfile] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
   };
-  
-  React.useEffect(()=>{
-    console.log("HEDSD")
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleAddChat = () => {
+
+    axios.post("http://localhost:8080/chat/getEmail", { "id": props.id })
+      .then((res) => {
+        console.log(res.data)
+        let details = JSON.parse(sessionStorage.getItem("details"))
+        axios.post("http://localhost:8080/chat/addContact", { "email": details.email, "contactemail": res.data.email })
+          .then((res) => {
+            console.log(res.data)
+            if (res.data === "Duplicate") {
+              alert("Contact already added")
+            }
+            else {
+              alert("Contact added")
+            }
+            handleClose()
+          })
+      })
+  }
+  const toProfile = ()=>{
+    console.log("Hi")
+    setnavigateToProfile(true)
+  }
+
+  React.useEffect(() => {
     console.log(props)
     console.log(props.mediaurl)
   })
-  
-  if(props.mediaurl!==""){
+if (props.mediaurl !== "") {
     return (
+      <Card sx={{ maxWidth: 500, minWidth: 500 }}>
+        <Link to={"/UserProfile"} state={{"email":props.email,"id":props.id}} style={{color:"black" }}>
+        <CardHeader
+          avatar={
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+              {props.firstname[0]}
+            </Avatar>
+          }
+          title={props.firstname + " " + props.lastname}
+          subheader={props.timestamp}
+          onClick={toProfile}
+        />
+        </Link>
+        <CardMedia
+          component="img"
+          height="200"
+          image={props.mediaurl}
+          style={{ "object-fit": "contain" }}
+        />
+        <CardContent style={{ "height": "150px" }}>
+          <Typography variant="body1" color="text.secondary" style={{ "word-break": "break-word" }}>
+            {props.text}
+          </Typography>
+        </CardContent>
+        <CardActions onClick={handleClickOpen}>
+          <IconButton aria-label="add to favorites">
+            <TryIcon />
+          </IconButton>
+        </CardActions>
+        <Dialog
+          fullScreen={fullScreen}
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="responsive-dialog-title"
+        >
+          <DialogTitle id="responsive-dialog-title">
+            <center>{"Add a connection"}</center>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Do you want to add {props.firstname + " " + props.lastname} into your contacts?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={handleClose} style={{ "marginRight": "120px" }}>
+              Disagree
+            </Button>
+            <Button onClick={handleAddChat} autoFocus>
+              Agree
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Card>
 
-      <Card sx={{ maxWidth: 500, minWidth : 500 }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {props.firstname[0]}
-          </Avatar>
-        }
-        // action={
-        //   <IconButton aria-label="settings">
-        //     <MoreVertIcon />
-        //   </IconButton>
-        // }
-        title= {props.name}
-        subheader={props.timestamp}
-      />
-      <CardMedia
-        component="img"
-        height="200"
-        image= {props.mediaurl}
-        style={{"object-fit":"contain"}}
-      />
-      <CardContent style={{"height":"150px"}}>
-        <Typography variant="body1" color="text.secondary" style={{"word-break":"break-word"}}>
-         {props.text}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <TryIcon/>
-        </IconButton>
-      </CardActions>
-    </Card>
-  
     );
-  }else{
+  } else {
     return (
+      <Card sx={{ maxWidth: 500, minWidth: 500 }}>
+         <Link to={"/UserProfile"} state={{"email":props.email,"id":props.id}} style={{color:"black" }} >
+        <CardHeader
+          avatar={
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+              {props.firstname[0]}
+            </Avatar>
+          }
+          // action={
+          //   <IconButton aria-label="settings">
+          //     <MoreVertIcon />
+          //   </IconButton>
+          // }
+          title={props.firstname + " " + props.lastname}
+          subheader={props.timestamp}
+        />
+        </Link>
+        <CardContent>
+          <Typography variant="body1" color="text.secondary" style={{ "word-break": "break-word" }}>
+            {props.text}
+          </Typography>
+        </CardContent>
+        <CardActions disableSpacing onClick={handleClickOpen}>
+          <IconButton aria-label="add to favorites">
+            <TryIcon />
+          </IconButton>
+        </CardActions>
+        <Dialog
+          fullScreen={fullScreen}
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="responsive-dialog-title"
+        >
+          <DialogTitle id="responsive-dialog-title">
+            <center>{"Add a connection"}</center>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Do you want to add {props.firstname + " " + props.lastname} into your contacts?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={handleClose} style={{ "marginRight": "120px" }}>
+              Disagree
+            </Button>
+            <Button onClick={handleAddChat} autoFocus>
+              Agree
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Card>
 
-      <Card sx={{ maxWidth: 500, minWidth : 500 }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {props.firstname[0]}
-          </Avatar>
-        }
-        // action={
-        //   <IconButton aria-label="settings">
-        //     <MoreVertIcon />
-        //   </IconButton>
-        // }
-        title= {props.name}
-        subheader={props.timestamp}
-      />
-      <CardContent>
-        <Typography variant="body1" color="text.secondary" style={{"word-break":"break-word"}}>
-         {props.text}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <TryIcon/>
-        </IconButton>
-      </CardActions>
-    </Card>
-  
     );
   }
-
 }

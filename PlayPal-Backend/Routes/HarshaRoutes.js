@@ -11,6 +11,7 @@ const {
 const {
   handleSaveNewBooking,
   handleGetAllBookingByUserId,
+  handleGetAllBookingByVenueOwnerId,
 } = require("../services/BookingsServices");
 const {
   handeGetAllVenueReviewsByVenueId,
@@ -56,4 +57,8 @@ router.delete("/venue/review/:reviewId", handleDeleteVenueReviewByReviewId);
 /*------------------Bookings Routes-------------------------- */
 router.post("/booking", handleSaveNewBooking);
 router.get("/bookings/:userId", handleGetAllBookingByUserId);
+router.get(
+  "/bookings/venueowner/:venueOwnerId",
+  handleGetAllBookingByVenueOwnerId
+);
 module.exports = router;

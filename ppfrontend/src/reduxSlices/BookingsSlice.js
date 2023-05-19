@@ -27,6 +27,14 @@ export const getAllBookingsByUserId = createAsyncThunk(
     return res.data;
   }
 );
+export const getAllBookingsByVenueOwnerId = createAsyncThunk(
+  "bookings/all/venueOwnerId",
+  async (venueId, thunkAPI) => {
+    const GET_BOOKINGS_BY_VENUEOWNERID_ID_API = `${BASE_URL}/harsha/bookings/venueowner/${venueId}`;
+    const res = await axios.get(GET_BOOKINGS_BY_VENUEOWNERID_ID_API);
+    return res.data;
+  }
+);
 const BookingsSlice = createSlice({
   name: "bookings",
   initialState,
@@ -51,6 +59,10 @@ const BookingsSlice = createSlice({
 
     builder.addCase(getAllBookingsByUserId.fulfilled, (state, action) => {
       state.bookingsListForUserId = action.payload.bookings;
+    });
+
+    builder.addCase(getAllBookingsByVenueOwnerId.fulfilled, (state, action) => {
+      state.bookingsListForVenueOwnerId = action.payload.bookings;
     });
   },
 });

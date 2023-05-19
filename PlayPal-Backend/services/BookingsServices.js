@@ -61,7 +61,25 @@ async function handleGetAllBookingByUserId(req, res, next) {
     next(err);
   }
 }
-module.exports = { handleSaveNewBooking, handleGetAllBookingByUserId };
+async function handleGetAllBookingByVenueOwnerId(req, res, next) {
+  try {
+    let bookings = await pool.query(queries.getAllBookingsByVenueIds, [
+      req.params.venueOwnerId,
+    ]);
+    let result = Object.entries(_.groupBy(bookings[0], "bookingid")).map(
+      (value, index, key) => group2(value[1])
+    );
+
+    res.send({ bookings: result });
+  } catch (error) {
+    next(error);
+  }
+}
+module.exports = {
+  handleSaveNewBooking,
+  handleGetAllBookingByUserId,
+  handleGetAllBookingByVenueOwnerId,
+};
 
 async function groupByBookings(bookings, venues) {
   let map_ = new Map();
@@ -101,4 +119,42 @@ async function groupByBookings(bookings, venues) {
     }
   }
   return map_.values();
+}
+
+function group2(arr) {
+  let output = {};
+  arr.forEach((e, idx) => {
+    // console.log(e);
+
+    output.bookingid = e.bookingid;
+    output.venueid = e.venueid;
+    output.userid = e.userid;
+    output.bookingtimestamp = e.bookingtimestamp;
+    output.bookingstatus = e.bookingstatus;
+    output.paymenttype = e.paymenttype;
+    output.price = e.price;
+    output.noofcourts = e.noofcourts;
+    output.venueownerid = e.venueownerid;
+    output.venuename = e.venuename;
+    output.startTime = e.startTime;
+    output.endTime = e.endTime;
+    output.address = e.address;
+    output.type = e.type;
+    output.city = e.city;
+    output.mobile = e.mobile;
+    output.email = e.email;
+    output.userfullname = e.userfullname;
+    output.usercity = e.usercity;
+    output.userprofilepic = e.userprofilepic;
+    output.usermobile = e.usermobile;
+    output.useremail = e.useremail;
+    if (idx == 0) {
+      output.slots = [];
+    }
+    output.slots.push({
+      timeslotstart: e.timeslotstart,
+      timeslotend: e.timeslotend,
+    });
+  });
+  return output;
 }

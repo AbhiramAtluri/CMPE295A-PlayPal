@@ -7,6 +7,7 @@ const {
   handleSaveCoachVerificationStatus,
   handleGetCoachVerificationReq,
   handleGetVenueVerificationReq,
+  handleGetTournamentDetails,
 } = require("../services/AdminServices");
 const {
   handleSaveNewBooking,
@@ -41,6 +42,7 @@ router.post(
 );
 router.post("/admin/tournament/new", handleSaveNewTournament);
 router.get("/admin/tournaments/all", handleGetAllTournaments);
+router.get("/admin/tournament/:id", handleGetTournamentDetails);
 
 /* --------------------Venue Routes  ------------------------------*/
 router.get("/venues/approved/all", handleGetAllApprovedVenues);

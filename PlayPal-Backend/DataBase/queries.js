@@ -58,6 +58,7 @@ JSON_ARRAYAGG(
 ) as url from playpal.venues as venue left join playpal.venueimages as images on venue.id=images.venueid group by venue.id having venue.id=?;`;
 const updateVenueById =
   "UPDATE `playpal`.`venues` SET `venuename` = ?, `startTime` = ?, `endTime` = ?, `address` = ?, `type` = ?, `city` = ?, `mobile` = ?, `email` = ?, `amenity1` = ?, `amenity2` = ?, `amenity3` = ?, `noofcourts` = ? ,`pricePerHour`= ? WHERE (`id` = ?);";
+const getTournamentDetails = `select * from tournaments inner join venues on venues.id=tournaments.venueid where tournamentid=?`;
 module.exports = {
   addNewUser,
   checkuser,
@@ -83,4 +84,5 @@ module.exports = {
   getUserReviews,
   getVenuesFeed,
   updateVenueById,
+  getTournamentDetails,
 };

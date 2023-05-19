@@ -22,6 +22,7 @@ import VenueFeed from "./VenueFeed";
 import UserBooking from "./Bookings/UserBooking";
 import UserBookingsList from "./Bookings/UserBookingsList";
 import VenueOwnerBookings from "./Bookings/VenueOwnerBookings";
+import Tournament from "./Admin/Tournaments/Tournament";
 
 export const themeOptions = createTheme({
   palette: {
@@ -135,6 +136,7 @@ function App() {
           ></Route>
           <Route path="/user/venue/booking/new" element={<UserBooking />} />
           <Route path="/user/bookings" element={<UserBookingsList />} />
+          <Route path="/admin/tournament/:id" element={<Tournament />} />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>

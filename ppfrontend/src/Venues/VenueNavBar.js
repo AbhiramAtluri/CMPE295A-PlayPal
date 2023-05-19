@@ -13,6 +13,9 @@ export default function VenueNavBar() {
     if (page == "home") navigate("/venueOwner/venue/lists");
     else if (page == "bookings") navigate("/venueOwner/bookings");
   };
+  const handleLogout = () => {
+    navigate("/venueOwner/login");
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -40,7 +43,9 @@ export default function VenueNavBar() {
               Bookings
             </Button>
           </Box>
-          <Button color="inherit">Logout</Button>
+          <Button color="inherit" onClick={handleLogout}>
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>

@@ -4,6 +4,7 @@ import { ErrorMessage } from "formik";
 
 const initialState = {
   tournamentList: [],
+  tournamentDetails: [],
   isLoading: false,
   isError: false,
   isDone: false,
@@ -15,6 +16,7 @@ const initialState = {
 const saveTournamentApi = "http://localhost:8080/harsha/admin/tournament/new";
 const getAllTournamentsApi =
   "http://localhost:8080/harsha/admin/tournaments/all";
+
 export const saveNewTournament = createAsyncThunk(
   "AdminTournament/save",
   async (formData, thunkAPI) => {
@@ -26,6 +28,14 @@ export const getAllTournaments = createAsyncThunk(
   "AdminTournament/getAll",
   async (thunkApi) => {
     const res = await axios.get(getAllTournamentsApi);
+    return res.data;
+  }
+);
+export const getTournamentDetails = createAsyncThunk(
+  "AdminTournament/getDetails",
+  async (id, thunkApi) => {
+    const getTournamentApi = `http://localhost:8080/harsha/admin/tournament/${id}`;
+    const res = await axios.get(getTournamentApi);
     return res.data;
   }
 );
@@ -65,6 +75,10 @@ export const AdminTournamentSlice = createSlice({
     builder.addCase(getAllTournaments.rejected, (state, action) => {
       state.getTournamentsLoading = false;
       state.getTournamentsError = true;
+    });
+
+    builder.addCase(getTournamentDetails.fulfilled, (state, action) => {
+      state.tournamentDetails = action.payload;
     });
   },
 });

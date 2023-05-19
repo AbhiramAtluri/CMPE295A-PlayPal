@@ -96,6 +96,16 @@ async function handleGetAllTournaments(req, res, next) {
     next(err);
   }
 }
+async function handleGetTournamentDetails(req, res, next) {
+  try {
+    const result = await pool.execute(queries.getTournamentDetails, [
+      req.params.id,
+    ]);
+    res.send(result[0]);
+  } catch (err) {
+    next(err);
+  }
+}
 module.exports = {
   handleGetCoachVerificationReq,
   handleGetVenueVerificationReq,
@@ -103,4 +113,5 @@ module.exports = {
   handleSaveVenueVerificationStatus,
   handleSaveNewTournament,
   handleGetAllTournaments,
+  handleGetTournamentDetails,
 };

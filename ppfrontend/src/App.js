@@ -23,6 +23,7 @@ import UserBooking from "./Bookings/UserBooking";
 import UserBookingsList from "./Bookings/UserBookingsList";
 import VenueOwnerBookings from "./Bookings/VenueOwnerBookings";
 import Tournament from "./Admin/Tournaments/Tournament";
+import ChatBot from "./ChatFolder/chatBot";
 
 export const themeOptions = createTheme({
   palette: {
@@ -96,6 +97,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={themeOptions}>
         <Routes>
+          <Route path="/" element={<ChatBot />} />
           <Route path="/Home" element={<Home />} />
           <Route path="/Feed" element={<Userfeed />}></Route>
           <Route path="/UserLogin" element={<UserLogin />}></Route>
